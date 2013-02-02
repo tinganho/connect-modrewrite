@@ -31,3 +31,7 @@ connect: {
   }
 }
 ```
+
+# Configurations
+In the example above, `modRewrite` take as an `Array` of rules as en arugment.
+

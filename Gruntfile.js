@@ -4,6 +4,32 @@ module.exports = function(grunt) {
 
   // Project configuration.
   grunt.initConfig({
+
+    jshint: {
+      options: {
+        asi: true,
+        curly: true,
+        eqeqeq: true,
+        immed: true,
+        latedef: true,
+        newcap: true,
+        noarg: true,
+        sub: true,
+        undef: true,
+        boss: true,
+        eqnull: true,
+        browser: true,
+        camelcase: true,
+        unused: true,
+        node: true
+      },
+      globals: {
+      },
+      files: [
+        'src/**/*.js'
+      ]
+    },
+
     connect: {
       server: {
         options: {
@@ -26,8 +52,9 @@ module.exports = function(grunt) {
 
   // Load plugins
   grunt.loadNpmTasks('grunt-contrib-connect');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default task(s).
-  grunt.registerTask('default', ['connect']);
+  grunt.registerTask('default', ['jshint', 'connect']);
 
 };

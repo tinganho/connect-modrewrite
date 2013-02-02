@@ -1,5 +1,7 @@
 module.exports = function(rules) {
 
+  'use strict';
+
   rules = (rules || []).map(function(rule) {
 
     var parts = rule.replace(/\s+|\t+/g, ' ').split(' ');

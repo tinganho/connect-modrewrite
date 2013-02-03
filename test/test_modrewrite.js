@@ -1,8 +1,8 @@
 var chai = require( 'chai' ),
     expect = chai.expect,
-    assert = chai.assert,
-    http   = require('http'),
-    grunt = require('grunt');
+    http   = require('http')
+
+// Please run `grunt connect before executing this script
 
 describe('grunt-contrib-connect-modrewrite', function() {
 

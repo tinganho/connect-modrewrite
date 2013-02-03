@@ -1,0 +1,128 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'node', '/usr/local/bin/npm', 'publish' ]
+2 info using npm@1.1.65
+3 info using node@v0.8.14
+4 verbose publish [ '.' ]
+5 verbose read json /Users/tingan87/Development/grunt-connect-urlrewrite/package.json
+6 verbose cache add [ '.', null ]
+7 silly cache add name=undefined spec="." args=[".",null]
+8 verbose parsed url { pathname: '.', path: '.', href: '.' }
+9 silly lockFile 3a52ce78- .
+10 verbose lock . /Users/tingan87/.npm/3a52ce78-.lock
+11 verbose read json package.json
+12 verbose tar pack [ '/var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/tmp.tgz',
+12 verbose tar pack   '.' ]
+13 verbose tarball /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/tmp.tgz
+14 verbose folder .
+15 info prepublish grunt-contrib-connect-modrewrite@0.1.1
+16 silly lockFile d0808c3b-695326-0-976743949111551-tmp-tgz /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/tmp.tgz
+17 verbose lock /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/tmp.tgz /Users/tingan87/.npm/d0808c3b-695326-0-976743949111551-tmp-tgz.lock
+18 silly lockFile d0808c3b-695326-0-976743949111551-tmp-tgz /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/tmp.tgz
+19 verbose tar unpack /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/tmp.tgz
+20 silly lockFile 2c32efaa-695326-0-976743949111551-package /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package
+21 verbose lock /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package /Users/tingan87/.npm/2c32efaa-695326-0-976743949111551-package.lock
+22 silly gunzTarPerm modes [ '755', '644' ]
+23 silly gunzTarPerm extractEntry package.json
+24 silly gunzTarPerm extractEntry .npmignore
+25 silly gunzTarPerm extractEntry README.md
+26 silly gunzTarPerm extractEntry Gruntfile.js
+27 silly gunzTarPerm extractEntry test/test_modrewrite.js
+28 silly gunzTarPerm extractEntry .travis.yml
+29 silly gunzTarPerm extractEntry src/modrewrite.js
+30 silly gunzTarPerm extractEntry bin/test
+31 silly gunzTarPerm extractEntry example/flag.html
+32 silly gunzTarPerm extractEntry example/index.html
+33 silly gunzTarPerm extractEntry example/style.css
+34 silly gunzTarPerm extractEntry LICENSE-MIT
+35 verbose read json /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package/package.json
+36 silly lockFile 2c32efaa-695326-0-976743949111551-package /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package
+37 verbose from cache /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package/package.json
+38 verbose tar pack [ '/Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz',
+38 verbose tar pack   '/var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package' ]
+39 verbose tarball /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz
+40 verbose folder /var/folders/cq/ns8nfcgj1h932v4hrsp1x4740000gn/T/npm-4914/1359887695326-0.976743949111551/package
+41 silly lockFile 42f4e8a8-ect-modrewrite-0-1-1-package-tgz /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz
+42 verbose lock /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz /Users/tingan87/.npm/42f4e8a8-ect-modrewrite-0-1-1-package-tgz.lock
+43 silly lockFile 42f4e8a8-ect-modrewrite-0-1-1-package-tgz /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz
+44 silly lockFile 900db9c9-connect-modrewrite-0-1-1-package /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package
+45 verbose lock /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package /Users/tingan87/.npm/900db9c9-connect-modrewrite-0-1-1-package.lock
+46 silly lockFile 900db9c9-connect-modrewrite-0-1-1-package /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package
+47 verbose tar unpack /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz
+48 silly lockFile 900db9c9-connect-modrewrite-0-1-1-package /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package
+49 verbose lock /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package /Users/tingan87/.npm/900db9c9-connect-modrewrite-0-1-1-package.lock
+50 silly gunzTarPerm modes [ '755', '644' ]
+51 silly gunzTarPerm extractEntry package.json
+52 silly gunzTarPerm extractEntry .npmignore
+53 silly gunzTarPerm extractEntry README.md
+54 silly gunzTarPerm extractEntry Gruntfile.js
+55 silly gunzTarPerm extractEntry .travis.yml
+56 silly gunzTarPerm extractEntry bin/test
+57 silly gunzTarPerm extractEntry example/flag.html
+58 silly gunzTarPerm extractEntry example/index.html
+59 silly gunzTarPerm extractEntry example/style.css
+60 silly gunzTarPerm extractEntry LICENSE-MIT
+61 silly gunzTarPerm extractEntry src/modrewrite.js
+62 silly gunzTarPerm extractEntry test/test_modrewrite.js
+63 verbose read json /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package/package.json
+64 silly lockFile 900db9c9-connect-modrewrite-0-1-1-package /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package
+65 silly shasum updated bytes 3919
+66 info shasum 18f5477daefbc1382cdc317efd4ac18ded914b47
+66 info shasum /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz
+67 verbose from cache /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package/package.json
+68 verbose chmod /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz 644
+69 verbose chown /Users/tingan87/.npm/grunt-contrib-connect-modrewrite/0.1.1/package.tgz [ 501, 20 ]
+70 silly lockFile 3a52ce78- .
+71 silly publish { name: 'grunt-contrib-connect-modrewrite',
+71 silly publish   main: './src/modrewrite.js',
+71 silly publish   version: '0.1.1',
+71 silly publish   description: 'grunt-contrib-connect-modrewrite is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project',
+71 silly publish   dependencies: { grunt: '~0.4.0', 'grunt-contrib-connect': '~0.1.0' },
+71 silly publish   author: { name: 'Tingan Ho', email: 'tingan87@gmail.com' },
+71 silly publish   contributors: [ { name: 'Tingan Ho', email: 'tingan87@gmail.com' } ],
+71 silly publish   repository:
+71 silly publish    { type: 'git',
+71 silly publish      url: 'git://github.com:tinganho/grunt-contrib-connect-modrewrite.git' },
+71 silly publish   bugs: { url: 'https://github.com/tinganho/grunt-contrib-connect-modrewrite/issues' },
+71 silly publish   licenses:
+71 silly publish    [ { type: 'MIT',
+71 silly publish        url: 'https://github.com/tinganho/grunt-contrib-connect-modrewrite/blob/master/LICENSE-MIT' } ],
+71 silly publish   devDependencies:
+71 silly publish    { 'grunt-contrib-jshint': '~0.1.0',
+71 silly publish      'grunt-bump': '0.0.1',
+71 silly publish      chai: '~1.4.2',
+71 silly publish      mocha: '~1.8.1' },
+71 silly publish   scripts: { test: './bin/test' },
+71 silly publish   keywords:
+71 silly publish    [ 'gruntplugin',
+71 silly publish      'grunt-contrib',
+71 silly publish      'grunt-contrib-connect',
+71 silly publish      'modrewrite' ],
+71 silly publish   readme: 'grunt-contrib-connect-modrewrite [![Build Status](https://travis-ci.org/tinganho/grunt-contrib-connect-modrewrite.png)](https://travis-ci.org/tinganho/grunt-contrib-connect-modrewrite)\n========================\n`grunt-contrib-connect-modrewrite` is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project.\n\n# Getting started\nInstall `grunt-contrib-connect-modrewrite` with:\n```bash\nnpm install grunt-contrib-connect-modrewrite\n```\n\nRequire it in your Gruntfile.js file:\n\n```javascript\nvar modRewrite = require(\'grunt-contrib-connect-modrewrite\');\n```\nIn grunt.initConfig please add the following code snippet:\n\n```javascript\nconnect: {\n  server: {\n    options: {\n      port: 9001,\n      base: \'example\',\n      keepalive: true,\n      middleware: function(connect, options) {\n        return [\n          modRewrite([\n            \'^/test$ /index.html\',\n            \'^/test/\\\\d*$ /index.html [L]\',\n            \'^/test/\\\\d*/\\\\d*$ /flag.html [L]\'\n          ]),\n          connect.static(options.base)\n        ]\n      }\n    }\n  }\n}\n```\n\n# Configurations\nIn the example above, `modRewrite` take as an `Array` of rewrite rules as an argument.\nEach rewrite rule is a string with the syntax:\n`MATCHING_PATHS REPLACE_WITH [FLAGS]`.\n`MATCHING_PATHS` should be defined using a regex string. And that string is passed as an argument to the javascript `RegExp Object` for matching of paths. `REPLACE_WITH` is the replacement string for matching paths. Flags is optional and is defined using hard brackets. We currently only support the last flag `[L]`. Please give suggestions to more flags that makes sense for `grunt-contrib-connect-modrewrite`. Keep in mind that `grunt-contrib-connect` is meant to be a simple static server.\n\n## Flags\n### Last [L]\nIf a path matches, any subsequent rewrite rules will be disregarded.\n\n## Authors\nTingan Ho, tingan87[at]gmail.com\n\n## License\nCopyright (c) 2012 Tingan Ho\nLicensed under the MIT license.\n',
+71 silly publish   readmeFilename: 'README.md',
+71 silly publish   _id: 'grunt-contrib-connect-modrewrite@0.1.1',
+71 silly publish   dist: { shasum: '18f5477daefbc1382cdc317efd4ac18ded914b47' } }
+72 verbose url raw grunt-contrib-connect-modrewrite
+73 verbose url resolving [ 'https://registry.npmjs.org/',
+73 verbose url resolving   './grunt-contrib-connect-modrewrite' ]
+74 verbose url resolved https://registry.npmjs.org/grunt-contrib-connect-modrewrite
+75 info trying registry request attempt 1 at 18:34:55
+76 http PUT https://registry.npmjs.org/grunt-contrib-connect-modrewrite
+77 http 409 https://registry.npmjs.org/grunt-contrib-connect-modrewrite
+78 verbose url raw grunt-contrib-connect-modrewrite
+79 verbose url resolving [ 'https://registry.npmjs.org/',
+79 verbose url resolving   './grunt-contrib-connect-modrewrite' ]
+80 verbose url resolved https://registry.npmjs.org/grunt-contrib-connect-modrewrite
+81 info trying registry request attempt 1 at 18:34:56
+82 http GET https://registry.npmjs.org/grunt-contrib-connect-modrewrite
+83 http 200 https://registry.npmjs.org/grunt-contrib-connect-modrewrite
+84 error publish fail Cannot publish over existing version.
+84 error publish fail Bump the 'version' field, set the --force flag, or
+84 error publish fail     npm unpublish 'grunt-contrib-connect-modrewrite@0.1.1'
+84 error publish fail and try again
+85 error System Darwin 12.2.0
+86 error command "node" "/usr/local/bin/npm" "publish"
+87 error cwd /Users/tingan87/Development/grunt-connect-urlrewrite
+88 error node -v v0.8.14
+89 error npm -v 1.1.65
+90 error code EPUBLISHCONFLICT
+91 verbose exit [ 1, true ]

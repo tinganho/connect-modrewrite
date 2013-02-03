@@ -6,3 +6,4 @@ before_install:
   - npm install grunt-cli -g
   - nohup bash -c "grunt connect > output.log 2>&1 &"
   - sleep 5
+  - grunt lint

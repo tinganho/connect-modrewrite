@@ -8,7 +8,7 @@ Install `grunt-contrib-connect-modrewrite` with:
 npm install grunt-contrib-connect-modrewrite
 ```
 
-In your Gruntfile.js file:
+Require it in your Gruntfile.js file:
 
 ```javascript
 var modRewrite = require('grunt-contrib-connect-modrewrite');

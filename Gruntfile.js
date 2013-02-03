@@ -23,8 +23,6 @@ module.exports = function(grunt) {
         unused: true,
         node: true
       },
-      globals: {
-      },
       files: [
         'src/**/*.js'
       ]

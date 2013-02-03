@@ -22,6 +22,7 @@ module.exports = function(rules) {
       // have an HTTP referer. We only normalize path which are assets
       if(typeof req.headers.referer === 'undefined') {
 
+        console.log(rewrite);
         // Rewrite Url
         req.url = req.url.replace(rewrite.regex, rewrite.replace);
         return rewrite.last;

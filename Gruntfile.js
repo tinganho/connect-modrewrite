@@ -38,7 +38,8 @@ module.exports = function(grunt) {
             return [
               urlRewrite([
                 '^/test$ /index.html',
-                '^/test/(.*)$ /index.html [L]'
+                '^/test/\\d*$ /index.html [L]',
+                '^/test/\\d*/\\d*$ /flag.html [L]'
               ]),
               connect.static(options.base)
             ]

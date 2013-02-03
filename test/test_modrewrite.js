@@ -32,13 +32,30 @@ describe('Authentication', function() {
       var req = http.request(options, function(res) {
         res.setEncoding('utf8');
         res.on('data', function (chunk) {
-          expect(/#relative-paths-get-normalized/.test(chunk)).is.true;
+          expect(/#relative-paths-get-normalized/.test(chunk)).to.be.true;
           done();
         });
       });
       req.end();
 
     });
+
+    it('should be able to recognize Last [L] flag', function(){
+      http.get('http://localhost:9001/test/2/1', function(res){
+        res.setEncoding('utf8');
+        res.on('data', function(chunk){
+          expect(chunk).to.be.a('string');
+          done();
+        });
+      });
+      http.get('http://localhost:9001/test/2/1', function(res){
+        res.setEncoding('utf8');
+        res.on('data', function(chunk){
+          expect(/flag-is-working/.test(chunk)).to.be.true;
+          done();
+        });
+      });
+    })
 
 
   });

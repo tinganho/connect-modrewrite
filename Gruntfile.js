@@ -1,6 +1,6 @@
 module.exports = function(grunt) {
 
-  var urlRewrite = require('./src/main');
+  var urlRewrite = require('./src/modrewrite');
 
   // Project configuration.
   grunt.initConfig({

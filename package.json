@@ -1,6 +1,6 @@
 {
   "name": "grunt-contrib-connect-modrewrite",
-  "main": "./src/main.js",
+  "main": "./src/modrewrite.js",
   "version": "0.1.0",
   "dependencies": {
     "grunt": "~0.4.0",

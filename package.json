@@ -1,7 +1,8 @@
 {
   "name": "grunt-contrib-connect-modrewrite",
   "main": "./src/modrewrite.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
+  "description": "grunt-contrib-connect-modrewrite is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project",
   "dependencies": {
     "grunt": "~0.4.0",
     "grunt-contrib-connect": "~0.1.0"

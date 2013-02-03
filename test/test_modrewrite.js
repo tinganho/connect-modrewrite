@@ -2,9 +2,9 @@ var chai = require( 'chai' ),
     expect = chai.expect,
     http   = require('http')
 
-// Please run `grunt connect before executing this script
+// Please run `grunt connect` before executing this script
 
-describe('grunt-contrib-connect-modrewrite', function() {
+describe('grunt-contrib-connect-modrewrite', function() {
 
   describe('Modrewrite', function() {
 
@@ -56,7 +56,6 @@ describe('grunt-contrib-connect-modrewrite', function() {
         });
       });
     })
-
 
   });
 });

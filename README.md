@@ -47,4 +47,9 @@ Each rewrite rule is a string with the syntax:
 ### Last [L]
 If a path matches, any subsequent rewrite rules will be disregarded.
 
+## Authors
+Tingan Ho, tingan87[at]gmail.com
 
+## License
+Copyright (c) 2012 Tingan Ho
+Licensed under the MIT license.

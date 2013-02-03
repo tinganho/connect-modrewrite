@@ -14,7 +14,6 @@ module.exports = function(rules) {
 
   });
 
-
   return function(req, res, next) {
 
     rules.some(function(rewrite) {

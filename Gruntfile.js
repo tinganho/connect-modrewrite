@@ -39,8 +39,8 @@ module.exports = function(grunt) {
           middleware: function(connect, options) {
             return [
               urlRewrite([
-                '^/friends$ /index.html',
-                '^/friends/(.*)$ /index.html [L]'
+                '^/test$ /index.html',
+                '^/test/(.*)$ /index.html [L]'
               ]),
               connect.static(options.base)
             ]

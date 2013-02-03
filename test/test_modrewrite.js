@@ -4,9 +4,9 @@ var chai = require( 'chai' ),
     http   = require('http'),
     grunt = require('grunt');
 
-describe('Authentication', function() {
+describe('grunt-contrib-connect-modrewrite', function() {
 
-  describe('GET /friends', function() {
+  describe('Modrewrite', function() {
 
     it('should response to one level path', function(done) {
       http.get('http://localhost:9001/test', function(res){

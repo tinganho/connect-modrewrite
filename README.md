@@ -1,17 +1,17 @@
-connect-rewrite [![Build Status](https://travis-ci.org/tinganho/connect-rewrite.png)](https://travis-ci.org/tinganho/connect-rewrite)
+connect-rewrite [![Build Status](https://travis-ci.org/tinganho/connect-modrewrite.png)](https://travis-ci.org/tinganho/connect-modrewrite)
 ========================
-`connect-rewrite` is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project.
+`connect-modrewrite` is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project.
 
 # Getting started
-Install `grunt-contrib-connect-modrewrite` with:
+Install `connect-modrewrite` with:
 ```bash
-npm install connect-rewrite
+npm install connect-modrewrite
 ```
 
 Require it in your Gruntfile.js file:
 
 ```javascript
-var modRewrite = require('connect-rewrite');
+var modRewrite = require('connect-modrewrite');
 ```
 In grunt.initConfig please add the following code snippet:
 
@@ -24,7 +24,7 @@ connect: {
       keepalive: true,
       middleware: function(connect, options) {
         return [
-          rewrite([
+          modRewrite([
             '^/test$ /index.html',
             '^/test/\\d*$ /index.html [L]',
             '^/test/\\d*/\\d*$ /flag.html [L]'
@@ -38,10 +38,10 @@ connect: {
 ```
 
 # Configurations
-In the example above, `rewrite` take as an `Array` of rewrite rules as an argument.
+In the example above, `modRewrite` take as an `Array` of rewrite rules as an argument.
 Each rewrite rule is a string with the syntax:
 `MATCHING_PATHS REPLACE_WITH [FLAGS]`.
-`MATCHING_PATHS` should be defined using a regex string. And that string is passed as an argument to the javascript `RegExp Object` for matching of paths. `REPLACE_WITH` is the replacement string for matching paths. Flags is optional and is defined using hard brackets. We currently only support the last flag `[L]`. Please give suggestions to more flags that makes sense for `connect-rewrite`. Keep in mind that `grunt-contrib-connect` is meant to be a simple static server.
+`MATCHING_PATHS` should be defined using a regex string. And that string is passed as an argument to the javascript `RegExp Object` for matching of paths. `REPLACE_WITH` is the replacement string for matching paths. Flags is optional and is defined using hard brackets. We currently only support the last flag `[L]`. Please give suggestions to more flags that makes sense for `connect-modrewrite`. Keep in mind that `grunt-contrib-connect` is meant to be a simple static server.
 
 ## Flags
 ### Last [L]

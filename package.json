@@ -1,7 +1,7 @@
 {
   "name": "connect-modrewrite",
   "main": "./src/modrewrite.js",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "connect-rewrite is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project",
   "dependencies": {
     "grunt": "~0.4.0",
@@ -19,15 +19,15 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com:tinganho/connect-rewrite.git"
+    "url": "git://github.com:tinganho/connect-modrewrite.git"
   },
   "bugs": {
-    "url": "https://github.com/tinganho/connect-rewrite/issues"
+    "url": "https://github.com/tinganho/connect-modrewrite/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/tinganho/connect-rewrite/blob/master/LICENSE-MIT"
+      "url": "https://github.com/tinganho/connect-modrewrite/blob/master/LICENSE-MIT"
     }
   ],
   "devDependencies": {

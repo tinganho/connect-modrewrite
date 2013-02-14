@@ -1,4 +1,4 @@
-connect-rewrite [![Build Status](https://travis-ci.org/tinganho/connect-modrewrite.png)](https://travis-ci.org/tinganho/connect-modrewrite)
+connect-modrewrite [![Build Status](https://travis-ci.org/tinganho/connect-modrewrite.png)](https://travis-ci.org/tinganho/connect-modrewrite)
 ========================
 `connect-modrewrite` is a middleware for grunt-contrib-connect. It adds modrewrite functionality to your grunt project.
 

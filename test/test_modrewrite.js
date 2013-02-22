@@ -40,20 +40,10 @@ describe('grunt-contrib-connect-modrewrite', function() {
 
     });
 
-    it('should be able to recognize Last [L] flag', function(){
-      http.get('http://localhost:9001/test/2/1', function(res){
-        res.setEncoding('utf8');
-        res.on('data', function(chunk){
-          expect(chunk).to.be.a('string');
-          done();
-        });
-      });
-      http.get('http://localhost:9001/test/2/1', function(res){
-        res.setEncoding('utf8');
-        res.on('data', function(chunk){
-          expect(/flag-is-working/.test(chunk)).to.be.true;
-          done();
-        });
+    it('should be able to recognize Last [L] flag', function(done){
+      http.get('http://localhost:9001/test-flag', function(res){
+        expect(res.statusCode).to.equal(404);
+        done();
       });
     })
 

@@ -23,8 +23,10 @@ module.exports = function(rules) {
       if(typeof req.headers.referer === 'undefined') {
 
         // Rewrite Url
-        req.url = req.url.replace(rewrite.regex, rewrite.replace);
-        return rewrite.last;
+        if(rewrite.regex.test(req.url)) {
+          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          return rewrite.last;
+        }
 
       // Else normalize path
       } else {
@@ -49,8 +51,10 @@ module.exports = function(rules) {
         req.url = '/' + urlSplits.join('/');
 
         // Rewrite Url
-        req.url = req.url.replace(rewrite.regex, rewrite.replace);
-        return rewrite.last;
+        if(rewrite.regex.test(req.url)) {
+          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          return rewrite.last;
+        }
 
       } // End of normalization
 

@@ -39,7 +39,10 @@ module.exports = function(grunt) {
               urlRewrite([
                 '^/test$ /index.html',
                 '^/test/\\d*$ /index.html [L]',
-                '^/test/\\d*/\\d*$ /flag.html [L]'
+
+                // Test last flag
+                '^/test-flag$ /connection [L]',
+                '^/connection$ /flag.html'
               ]),
               connect.static(options.base)
             ]

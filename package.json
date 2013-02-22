@@ -1,7 +1,7 @@
 {
   "name": "connect-modrewrite",
   "main": "./src/modrewrite.js",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "connect-modrewrite is a middleware for connect. It adds modrewrite functionality to your project",
   "dependencies": {
     "grunt": "~0.4.0",

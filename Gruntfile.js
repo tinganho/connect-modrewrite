@@ -42,7 +42,11 @@ module.exports = function(grunt) {
 
                 // Test last flag
                 '^/test-flag$ /connection [L]',
-                '^/connection$ /flag.html'
+                '^/connection$ /index.html',
+
+                // Test last flag
+                '^/test-flag-2$ /connection-2',
+                '^/connection-2$ /index.html'
               ]),
               connect.static(options.base)
             ]

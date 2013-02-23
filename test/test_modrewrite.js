@@ -45,6 +45,10 @@ describe('grunt-contrib-connect-modrewrite', function() {
         expect(res.statusCode).to.equal(404);
         done();
       });
+      http.get('http://localhost:9001/test-flag-2', function(res){
+        expect(res.statusCode).to.equal(200);
+        done();
+      });
     })
 
   });

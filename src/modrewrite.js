@@ -6,9 +6,16 @@ module.exports = function(rules) {
 
     var parts = rule.replace(/\s+|\t+/g, ' ').split(' ');
 
+    // Check inverted urls
+    var inverted = parts[0].substr(0,1) === '!';
+    if(inverted) {
+      parts[0] = parts[0].substr(1);
+    }
+
     return {
       regex: new RegExp(parts[0]),
       replace: parts[1],
+      inverted: inverted,
       last: !!parts[2]
     };
 
@@ -23,7 +30,9 @@ module.exports = function(rules) {
       if(typeof req.headers.referer === 'undefined') {
 
         // Rewrite Url
-        if(rewrite.regex.test(req.url)) {
+        if(rewrite.regex.test(req.url) && rewrite.inverted) {
+          return rewrite.last;
+        } else if(rewrite.regex.test(req.url)) {
           req.url = req.url.replace(rewrite.regex, rewrite.replace);
           return rewrite.last;
         }
@@ -51,7 +60,9 @@ module.exports = function(rules) {
         req.url = '/' + urlSplits.join('/');
 
         // Rewrite Url
-        if(rewrite.regex.test(req.url)) {
+        if(rewrite.regex.test(req.url) && rewrite.inverted) {
+          return rewrite.last;
+        } else if(rewrite.regex.test(req.url)) {
           req.url = req.url.replace(rewrite.regex, rewrite.replace);
           return rewrite.last;
         }

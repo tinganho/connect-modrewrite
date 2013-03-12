@@ -58,9 +58,20 @@ describe('connect-modrewrite', function() {
   });
 
   it('should be able to handle inverted urls', function(done){
+    var doneRequest = 0;
     http.get('http://localhost:9001/style.css', function(res){
       expect(res.statusCode).to.equal(200);
-      done();
+      doneRequest++;
+      if(doneRequest === 2) {
+        done();
+      }
+    });
+    http.get('http://localhost:9001/inverted.scss', function(res){
+      expect(/index\.html/.test(res.headers.location)).to.be.true;
+      doneRequest++;
+      if(doneRequest === 2) {
+        done();
+      }
     });
   });
 

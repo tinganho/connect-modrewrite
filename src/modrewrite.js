@@ -13,10 +13,10 @@ module.exports = function(rules) {
     }
 
     return {
-      regex: new RegExp(parts[0]),
-      replace: parts[1],
-      inverted: inverted,
-      last: !!parts[2]
+      regex    : new RegExp(parts[0]),
+      replace  : parts[1],
+      inverted : inverted,
+      last     : typeof parts[2] !== 'undefined' ? /L/g.test(parts[2]) : false
     };
 
   });
@@ -33,10 +33,12 @@ module.exports = function(rules) {
         if(rewrite.regex.test(req.url) && rewrite.inverted) {
           return rewrite.last;
         } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
-          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          res.setHeader('Location', 'http://' + req.headers.host + rewrite.replace);
+          req.url = rewrite.replace;
           return rewrite.last;
         } else if(rewrite.regex.test(req.url)) {
-          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          res.setHeader('Location', 'http://' + req.headers.host + rewrite.replace);
+          req.url = rewrite.replace;
           return rewrite.last;
         }
 
@@ -66,10 +68,12 @@ module.exports = function(rules) {
         if(rewrite.regex.test(req.url) && rewrite.inverted) {
           return rewrite.last;
         } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
-          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          res.setHeader('Location', 'http://' + req.headers.host + rewrite.replace);
+          req.url = rewrite.replace;
           return rewrite.last;
         } else if(rewrite.regex.test(req.url)) {
-          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          res.setHeader('Location', 'http://' + req.headers.host + rewrite.replace);
+          req.url = rewrite.replace;
           return rewrite.last;
         }
 

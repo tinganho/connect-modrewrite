@@ -38,9 +38,6 @@ module.exports = function(grunt) {
             return [
               urlRewrite([
 
-                // Test inverted URL
-                '!\\.js|\\.css$ /index.html',
-
                 '^/test$ /index.html',
                 '^/test/\\d*$ /index.html [L]',
 
@@ -50,7 +47,10 @@ module.exports = function(grunt) {
 
                 // Test last flag
                 '^/test-flag-2$ /connection-2',
-                '^/connection-2$ /index.html'
+                '^/connection-2$ /index.html',
+
+                // Test inverted URL
+                '!\\.js|\\.css$ /index.html',
 
               ]),
               connect.static(options.base)

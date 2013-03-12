@@ -32,6 +32,9 @@ module.exports = function(rules) {
         // Rewrite Url
         if(rewrite.regex.test(req.url) && rewrite.inverted) {
           return rewrite.last;
+        } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
+          req.url = req.url.replace(rewrite.regex, rewrite.replace);
+          return rewrite.last;
         } else if(rewrite.regex.test(req.url)) {
           req.url = req.url.replace(rewrite.regex, rewrite.replace);
           return rewrite.last;
@@ -61,6 +64,9 @@ module.exports = function(rules) {
 
         // Rewrite Url
         if(rewrite.regex.test(req.url) && rewrite.inverted) {
+          return rewrite.last;
+        } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
+          req.url = req.url.replace(rewrite.regex, rewrite.replace);
           return rewrite.last;
         } else if(rewrite.regex.test(req.url)) {
           req.url = req.url.replace(rewrite.regex, rewrite.replace);

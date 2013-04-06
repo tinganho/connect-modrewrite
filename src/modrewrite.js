@@ -46,17 +46,20 @@ module.exports = function(rules) {
       req.url = '/' + urlSplits.join('/');
     }
 
+    var protocol = req.connection.encrypted ? 'https' : 'http'
+
     rules.some(function(rewrite) {
 
+        var location = protocol + '://' + req.headers.host + rewrite.replace;
         // Rewrite Url
         if(rewrite.regex.test(req.url) && rewrite.inverted) {
           return rewrite.last;
         } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
-          res.setHeader('Location', 'http://' + req.headers.host + rewrite.replace);
+          res.setHeader('Location', location);
           req.url = rewrite.replace;
           return rewrite.last;
         } else if(rewrite.regex.test(req.url)) {
-          res.setHeader('Location', 'http://' + req.headers.host + rewrite.replace);
+          res.setHeader('Location', location);
           req.url = rewrite.replace;
           return rewrite.last;
         }

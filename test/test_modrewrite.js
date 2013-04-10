@@ -1,10 +1,15 @@
-var chai = require( 'chai' ),
+var chai   = require( 'chai' ),
     expect = chai.expect,
-    http   = require('http')
-
-// Please run `grunt connect` before executing this script
+    http   = require('http'),
+    exec   = require('child_process').exec;
 
 describe('connect-modrewrite', function() {
+  this.timeout(5000)
+  before(function(done) {
+    exec('grunt connect', function() {
+      done();
+    });
+  })
 
   it('should response to one level path', function(done) {
     http.get('http://localhost:9001/test', function(res){

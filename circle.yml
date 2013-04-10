@@ -1,0 +1,9 @@
+machine:
+  node:
+    version: 0.8
+machine:
+  pre:
+    - npm install grunt-cli -g
+test:
+  pre:
+    - grunt connect

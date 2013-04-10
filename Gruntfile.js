@@ -52,6 +52,8 @@ module.exports = function(grunt) {
                 // Test inverted URL
                 '!\\.js|\\.css$ /index.html',
 
+              ], [
+                /\/test/
               ]),
               connect.static(options.base)
             ]

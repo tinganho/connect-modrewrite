@@ -83,7 +83,7 @@ module.exports = function(rules, normalize) {
           return rewrite.last;
         } else if(rewrite.regex.test(req.url)) {
           res.setHeader('Location', location);
-          req.url = rewrite.replace;
+          req.url = req.url.replace(rewrite.regex, rewrite.replace);
           return rewrite.last;
         }
 

@@ -13,7 +13,7 @@ Require it:
 ```javascript
 var modRewrite = require('connect-modrewrite');
 ```
-An example configuration
+An example configuration:
 
 ```javascript
 var app = connect() // express() for express server

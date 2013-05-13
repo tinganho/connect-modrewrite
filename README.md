@@ -51,6 +51,11 @@ Connect-modrewrite normalized all URL:s that where assets before. Now in version
 ## Inverted URL matching
 Begin with `!` for inverted URL matching.
 
+## Use defined params
+Just wrap the defined param with `()` and access it with `$n`. This is defined in JS `.replace` in https://developer.mozilla.org/en/docs/JavaScript/Reference/Global_Objects/String/replace
+
+`^/blog/(.*) /$1`
+
 ## Flags
 ### Last [L]
 If a path matches, any subsequent rewrite rules will be disregarded.

@@ -1,6 +1,6 @@
 connect-modrewrite [![Build Status](https://travis-ci.org/tinganho/connect-modrewrite.png)](https://travis-ci.org/tinganho/connect-modrewrite)
 ========================
-`connect-modrewrite` is a middleware for connect. It adds modrewrite functionality to your project.
+`connect-modrewrite` is a middleware for connect and express. It adds modrewrite functionality to your project.
 
 # Getting started
 Install `connect-modrewrite` with:
@@ -8,35 +8,24 @@ Install `connect-modrewrite` with:
 npm install connect-modrewrite --save
 ```
 
-Require it in your Gruntfile.js file:
+Require it:
 
 ```javascript
 var modRewrite = require('connect-modrewrite');
 ```
-In grunt.initConfig please add the following code snippet:
+An example configuration
 
 ```javascript
-connect: {
-  server: {
-    options: {
-      port: 9001,
-      base: 'example',
-      keepalive: true,
-      middleware: function(connect, options) {
-        return [
-          modRewrite([
-            '^/test$ /index.html',
-            '^/test/\\d*$ /index.html [L]',
-            '^/test/\\d*/\\d*$ /flag.html [L]'
-          ], [
-            /\/test/ //Notice that it is not a string
-          ]),
-          connect.static(options.base)
-        ]
-      }
-    }
-  }
-}
+var app = connect() // express() for express server
+  .use(modRewrite([
+      '^/test$ /index.html',
+      '^/test/\\d*$ /index.html [L]',
+      '^/test/\\d*/\\d*$ /flag.html [L]'
+    ], [
+      /\/test/ //Notice that it is not a string
+  ]))
+  .use(connect.static(options.base))
+  .listen(3000)
 ```
 
 # Configurations

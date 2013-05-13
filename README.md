@@ -1,6 +1,6 @@
 connect-modrewrite [![Build Status](https://travis-ci.org/tinganho/connect-modrewrite.png)](https://travis-ci.org/tinganho/connect-modrewrite)
 ========================
-`connect-modrewrite` is a middleware for connect and express. It adds modrewrite functionality to your project.
+`connect-modrewrite` adds modrewrite functionality to connect/express server.
 
 # Getting started
 Install `connect-modrewrite` with:

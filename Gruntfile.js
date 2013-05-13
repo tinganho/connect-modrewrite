@@ -49,6 +49,9 @@ module.exports = function(grunt) {
                 '^/test-flag-2$ /connection-2',
                 '^/connection-2$ /index.html',
 
+                // Test defined params
+                '^/test-defined-params/(.*)$ /$1',
+
                 // Test inverted URL
                 '!\\.js|\\.css$ /index.html',
 

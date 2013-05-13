@@ -4,12 +4,6 @@ var chai   = require( 'chai' ),
     exec   = require('child_process').exec;
 
 describe('connect-modrewrite', function() {
-  this.timeout(5000)
-  before(function(done) {
-    exec('grunt connect', function() {
-      done();
-    });
-  })
 
   it('should response to one level path', function(done) {
     http.get('http://localhost:9001/test', function(res){
@@ -43,17 +37,17 @@ describe('connect-modrewrite', function() {
 
   });
 
-  it('should be able to recognize Last [L] flag', function(done){
+  it('should be able to recognize Last [L] flag', function(done) {
 
     var doneRequest = 0;
-    http.get('http://localhost:9001/test-flag', function(res){
+    http.get('http://localhost:9001/test-flag', function(res) {
       expect(res.statusCode).to.equal(404);
       doneRequest++;
       if(doneRequest === 2) {
         done();
       }
     });
-    http.get('http://localhost:9001/test-flag-2', function(res){
+    http.get('http://localhost:9001/test-flag-2', function(res) {
       expect(res.statusCode).to.equal(200);
       doneRequest++;
       if(doneRequest === 2) {
@@ -62,24 +56,30 @@ describe('connect-modrewrite', function() {
     });
   });
 
-  it('should be able to handle inverted urls', function(done){
+  it('should be able to handle defined params', function() {
+    http.get('http://localhost:9001/test-defined-params/style.css', function(res) {
+      expect(res.statusCode).to.equal(200);
+    });
+  });
+
+  it('should be able to handle inverted urls', function(done) {
     var doneRequest = 0;
     var threshold = 3;
-    http.get('http://localhost:9001/style.css', function(res){
+    http.get('http://localhost:9001/style.css', function(res) {
       expect(res.statusCode).to.equal(200);
       doneRequest++;
       if(doneRequest === threshold) {
         done();
       }
     });
-    http.get('http://localhost:9001/inverted.scss', function(res){
+    http.get('http://localhost:9001/inverted.scss', function(res) {
       expect(/index\.html/.test(res.headers.location)).to.be.true;
       doneRequest++;
       if(doneRequest === threshold) {
         done();
       }
     });
-    http.get('http://localhost:9001/inverkwhhwgyigheyted.js', function(res){
+    http.get('http://localhost:9001/inverkwhhwgyigheyted.js', function(res) {
       expect(res.statusCode).to.be.equal(404);
       doneRequest++;
       if(doneRequest === threshold) {

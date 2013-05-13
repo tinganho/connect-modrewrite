@@ -60,19 +60,16 @@ module.exports = function(rules, normalize) {
     // Some request are not assets request, which means they don't
     // have an HTTP referer. We only normalize path which are assets
     if(typeof req.headers.referer !== 'undefined') {
-
       if(normalize) {
         if(isNormalizable(req.url)) {
           normalizeUrl(req);
         }
       }
-
     }
 
     var protocol = req.connection.encrypted ? 'https' : 'http'
 
     rules.some(function(rewrite) {
-
         var location = protocol + '://' + req.headers.host + rewrite.replace;
         // Rewrite Url
         if(rewrite.regex.test(req.url) && rewrite.inverted) {
@@ -80,13 +77,12 @@ module.exports = function(rules, normalize) {
         } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
           res.setHeader('Location', location);
           req.url = rewrite.replace;
-          return rewrite.last;
+          return req.url.replace(rewrite.regex, rewrite.replace);
         } else if(rewrite.regex.test(req.url)) {
           res.setHeader('Location', location);
           req.url = req.url.replace(rewrite.regex, rewrite.replace);
           return rewrite.last;
         }
-
     });
 
     next();

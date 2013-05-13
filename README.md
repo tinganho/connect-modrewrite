@@ -29,7 +29,7 @@ connect: {
             '^/test/\\d*$ /index.html [L]',
             '^/test/\\d*/\\d*$ /flag.html [L]'
           ], [
-            '/\/test/'
+            /\/test/ //Notice that it is not a string
           ]),
           connect.static(options.base)
         ]

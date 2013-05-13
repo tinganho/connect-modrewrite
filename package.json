@@ -1,7 +1,7 @@
 {
   "name": "connect-modrewrite",
   "main": "./src/modrewrite.js",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "connect-modrewrite adds modrewrite functionality to connect/express server",
   "dependencies": {
     "grunt": "~0.4.0",

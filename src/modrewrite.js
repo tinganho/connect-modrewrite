@@ -36,7 +36,7 @@ module.exports = function(rules, normalize) {
 
   function normalizeUrl(req) {
     // Split URLs for later normalization
-    var referersSplits = req.headers.referer.split('/'),
+    var referersSplits = req.headers.referer..split('?')[0].split('/'),
         urlSplits = req.url.substr(1).split('/'); // substr(1) is there because the string begins with /
     // Remove hostname
     referersSplits.splice(0, 3);

@@ -44,13 +44,7 @@ module.exports = function(rules, normalize) {
     // supposed to be used in the normalization process
     referersSplits.pop();
     // Normalization process
-    urlSplits.forEach(function(value, index) {
-      if(value === referersSplits[index]) {
-        urlSplits.splice(index, 1);
-      } else {
-        return false;
-      }
-    });
+    urlSplits.splice(0, referersSplits.length);
     // Join back all splits
     req.url = '/' + urlSplits.join('/');
   }

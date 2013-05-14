@@ -3,10 +3,6 @@
   "main": "./src/modrewrite.js",
   "version": "0.3.4",
   "description": "connect-modrewrite adds modrewrite functionality to connect/express server",
-  "dependencies": {
-    "grunt": "~0.4.0",
-    "grunt-contrib-connect": "~0.1.0"
-  },
   "author": {
     "name": "Tingan Ho",
     "email": "tingan87@gmail.com"
@@ -32,6 +28,8 @@
   ],
   "devDependencies": {
     "grunt-contrib-jshint": "~0.1.0",
+    "grunt": "~0.4.0",
+    "grunt-contrib-connect": "~0.1.0",
     "grunt-bump": "0.0.1",
     "chai": "~1.4.2",
     "mocha": "~1.8.1"

@@ -47,7 +47,7 @@ module.exports = function(rules, normalize) {
     var removes = 0;
     for( var i = 0; i < referersSplits.length; i++) {
       var urlIndex = i - removes;
-      if(referersSplits[i] == urlSplits[urlIndex]) {
+      if(referersSplits[i] === urlSplits[urlIndex]) {
         urlSplits.splice(urlIndex, 1);
         removes++;
       } else {

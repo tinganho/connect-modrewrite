@@ -1,3 +1,5 @@
+var url = require('url');
+
 module.exports = function(rules, normalize) {
 
   'use strict';
@@ -34,20 +36,15 @@ module.exports = function(rules, normalize) {
     return normalizable;
   }
 
-  function normalizeUrl(req) {
+  function normalizeUrl(req, referersPath) {
     // Split URLs for later normalization
-    var referersSplits = req.headers.referer.split('?')[0].split('/'),
-        urlSplits = req.url.substr(1).split('/'); // substr(1) is there because the string begins with /
-    // Remove hostname
-    referersSplits.splice(0, 3);
-    // Remove the last part of the referer since it is not
-    // supposed to be used in the normalization process
-    referersSplits.pop();
+    var referersSplits = referersPath.substr(1).split('?')[0].split('/'),
+        urlSplits = req.url.substr(1).split('?')[0].split('/'); // substr(1) is there because the string begins with /
     // Normalization process
     var removes = 0;
     for( var i = 0; i < referersSplits.length; i++) {
       var urlIndex = i - removes;
-      if(referersSplits[i] === urlSplits[urlIndex]) {
+      if(referersSplits[i] == urlSplits[urlIndex]) {
         urlSplits.splice(urlIndex, 1);
         removes++;
       } else {
@@ -60,12 +57,18 @@ module.exports = function(rules, normalize) {
 
   return function(req, res, next) {
 
+
     // Some request are not assets request, which means they don't
     // have an HTTP referer. We only normalize path which are assets
     if(typeof req.headers.referer !== 'undefined') {
+      var referersPath = url.parse(req.headers.referer).path;
+      if(req.url === referersPath) {
+        next();
+        return;
+      }
       if(normalize) {
         if(isNormalizable(req.url)) {
-          normalizeUrl(req);
+          normalizeUrl(req, referersPath);
         }
       }
     }

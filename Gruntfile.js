@@ -50,10 +50,10 @@ module.exports = function(grunt) {
                 '^/connection-2$ /index.html',
 
                 // Test defined params
-                '^/test-defined-params/(.*)$ /$1',
+                '^/test-defined-params/(.*)$ /$1 [L]',
 
-                // Test inverted URLs
-                '!\\.js|\\.css$ /index.html',
+                // Test inverted URL
+                '!\\.js|\\.css$ /index.html'
 
               ], [
                 /\/test/

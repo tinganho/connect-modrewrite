@@ -76,19 +76,19 @@ module.exports = function(rules, normalize) {
     var protocol = req.connection.encrypted ? 'https' : 'http'
 
     rules.some(function(rewrite) {
-        var location = protocol + '://' + req.headers.host + rewrite.replace;
-        // Rewrite Url
-        if(rewrite.regex.test(req.url) && rewrite.inverted) {
-          return rewrite.last;
-        } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
-          res.setHeader('Location', location);
-          req.url = rewrite.replace;
-          return req.url.replace(rewrite.regex, rewrite.replace);
-        } else if(rewrite.regex.test(req.url)) {
-          res.setHeader('Location', location);
-          req.url = req.url.replace(rewrite.regex, rewrite.replace);
-          return rewrite.last;
-        }
+      var location = protocol + '://' + req.headers.host + rewrite.replace;
+      // Rewrite Url
+      if(rewrite.regex.test(req.url) && rewrite.inverted) {
+        return rewrite.last;
+      } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
+        res.setHeader('Location', location);
+        req.url.replace(rewrite.regex, rewrite.replace);
+        return rewrite.last;
+      } else if(rewrite.regex.test(req.url)) {
+        res.setHeader('Location', location);
+        req.url = req.url.replace(rewrite.regex, rewrite.replace);
+        return rewrite.last;
+      }
     });
 
     next();

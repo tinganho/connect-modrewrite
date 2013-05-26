@@ -52,7 +52,7 @@ module.exports = function(grunt) {
                 // Test defined params
                 '^/test-defined-params/(.*)$ /$1',
 
-                // Test inverted URL
+                // Test inverted URLs
                 '!\\.js|\\.css$ /index.html',
 
               ], [

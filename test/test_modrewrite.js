@@ -4,7 +4,7 @@ var chai   = require( 'chai' ),
     exec   = require('child_process').exec;
 
 describe('connect-modrewrite', function() {
-
+  this.timeout(10000);
   it('should response to one level path', function(done) {
     http.get('http://localhost:9001/test', function(res){
       res.setEncoding('utf8');
@@ -64,7 +64,7 @@ describe('connect-modrewrite', function() {
 
   it('should be able to handle inverted urls', function(done) {
     var doneRequest = 0;
-    var threshold = 3;
+    var threshold = 2;
     http.get('http://localhost:9001/style.css', function(res) {
       expect(res.statusCode).to.equal(200);
       doneRequest++;
@@ -74,13 +74,6 @@ describe('connect-modrewrite', function() {
     });
     http.get('http://localhost:9001/inverted.scss', function(res) {
       expect(/index\.html/.test(res.headers.location)).to.be.true;
-      doneRequest++;
-      if(doneRequest === threshold) {
-        done();
-      }
-    });
-    http.get('http://localhost:9001/inverkwhhwgyigheyted.js', function(res) {
-      expect(res.statusCode).to.be.equal(404);
       doneRequest++;
       if(doneRequest === threshold) {
         done();

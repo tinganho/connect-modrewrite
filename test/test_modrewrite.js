@@ -62,7 +62,7 @@ describe('connect-modrewrite', function() {
     });
   });
 
-  it('should be able to handle inverted urls', function(done) {
+  it('should be able to handle inverted urls 1', function(done) {
     var doneRequest = 0;
     var threshold = 2;
     http.get('http://localhost:9001/style.css', function(res) {
@@ -80,5 +80,13 @@ describe('connect-modrewrite', function() {
       }
     });
   });
+
+  it('should be able to handle inverted urls 2', function() {
+    http.get('http://localhost:9001/test-defined-params/style.css', function(res) {
+      expect(res.statusCode).to.equal(200);
+    });
+  });
+
+
 
 });

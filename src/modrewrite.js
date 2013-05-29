@@ -73,8 +73,6 @@ module.exports = function(rules, normalize) {
       }
     }
 
-    console.log(req.url)
-
     var protocol = req.connection.encrypted ? 'https' : 'http'
 
     rules.some(function(rewrite) {

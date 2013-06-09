@@ -62,12 +62,12 @@ module.exports = function(rules, normalize) {
     // have an HTTP referer. We only normalize path which are assets
     if(typeof req.headers.referer !== 'undefined') {
       var referersPath = url.parse(req.headers.referer).path;
-      if(req.url === referersPath) {
-        next();
-        return;
-      }
       if(normalize) {
         if(isNormalizable(req.url)) {
+          if(req.url === referersPath) {
+            next();
+            return;
+          }
           normalizeUrl(req, referersPath);
         }
       }

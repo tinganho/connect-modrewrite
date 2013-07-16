@@ -19,11 +19,9 @@ An example configuration:
 var app = connect() // express() for express server
 // app.configure(function() { for express server
   .use(modRewrite([
-      '^/test$ /index.html',
-      '^/test/\\d*$ /index.html [L]',
-      '^/test/\\d*/\\d*$ /flag.html [L]'
-    ], [
-      /\/test/ //Notice that it is not a string
+    '^/test$ /index.html',
+    '^/test/\\d*$ /index.html [L]',
+    '^/test/\\d*/\\d*$ /flag.html [L]'
   ]))
   .use(connect.static(options.base))
   .listen(3000)

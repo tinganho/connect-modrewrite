@@ -15,27 +15,6 @@ describe('connect-modrewrite', function() {
     });
   });
 
-  it('should be able normalize relative paths', function(done) {
-    var options = {
-      hostname: 'localhost',
-      port: 9001,
-      path: '/test/style.css',
-      method: 'GET',
-      headers: {
-        'Referer': 'http://localhost:9001/test/2'
-      }
-    };
-
-    var req = http.request(options, function(res) {
-      res.setEncoding('utf8');
-      res.on('data', function (chunk) {
-        expect(/#relative-paths-get-normalized/.test(chunk)).to.be.true;
-        done();
-      });
-    });
-    req.end();
-
-  });
 
   it('should be able to recognize Last [L] flag', function(done) {
 

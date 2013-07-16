@@ -1,6 +1,5 @@
-var url = require('url');
 
-module.exports = function(rules, normalize) {
+module.exports = function(rules) {
 
   'use strict';
 

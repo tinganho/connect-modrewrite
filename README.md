@@ -52,7 +52,7 @@ Proxy your requests
 '^/test/proxy/(.*)$ http://nodejs.org/$1 [L]'
 ```
 
-### Redirect [NC]
+### Redirect [R]
 Issue a redirect for request
 
 ### Nocase [NC]

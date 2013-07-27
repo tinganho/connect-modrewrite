@@ -42,5 +42,8 @@
     "grunt-contrib",
     "grunt-contrib-connect",
     "modrewrite"
-  ]
+  ],
+  "dependencies": {
+    "extend": "~1.1.3"
+  }
 }

@@ -52,11 +52,24 @@ Proxy your requests
 '^/test/proxy/(.*)$ http://nodejs.org/$1 [P]'
 ```
 
-### Redirect [R]
-Issue a redirect for request
+### Redirect [R], [R=3**] (replace * with numbers)
+Issue a redirect for request.
 
 ### Nocase [NC]
-Regex match will be case-insensitive
+Regex match will be case-insensitive.
+
+### Forbidden [F]
+Gives a HTTP 403 forbidden response.
+
+### Gone [G]
+Gives a HTTP 410 gone response.
+
+### Gone [T=*] (replace * with mime-type)
+Sets content-type to the specified one.
+
+
+For more info about available flags, please go to the Apache page:
+http://httpd.apache.org/docs/current/rewrite/flags.html
 
 ## Authors
 Tingan Ho, tingan87[at]gmail.com

@@ -114,7 +114,6 @@ describe('connect-modrewrite', function() {
 
   it('should be able to handle type flags', function(done) {
     http.get('http://localhost:9001/test/type', function(res) {
-      console.log(res.headers);
       expect(res.headers['content-type']).to.have.string('image/png');
       done();
     });

@@ -52,7 +52,7 @@ Proxy your requests
 '^/test/proxy/(.*)$ http://nodejs.org/$1 [P]'
 ```
 
-### Redirect [R], [R=3**] (replace * with numbers)
+### Redirect [R], \[R=3**\] (replace * with numbers)
 Issue a redirect for request.
 
 ### Nocase [NC]
@@ -64,7 +64,7 @@ Gives a HTTP 403 forbidden response.
 ### Gone [G]
 Gives a HTTP 410 gone response.
 
-### Gone [T=*] (replace * with mime-type)
+### Type \[T=*\] (replace * with mime-type)
 Sets content-type to the specified one.
 
 

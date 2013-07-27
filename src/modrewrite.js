@@ -1,7 +1,6 @@
 
 
-var url    = require('url')
-  , extend = require('extend');
+var url = require('url');
 
 module.exports = function(rules) {
 
@@ -10,6 +9,10 @@ module.exports = function(rules) {
   rules = (rules || []).map(function(rule) {
 
     var parts = rule.replace(/\s+|\t+/g, ' ').split(' ');
+    var flags = '';
+    if(/\[(.*)\]/.test(rule)) {
+      flags = /\[(.*)\]/.exec(rule)[1];
+    }
 
     // Check inverted urls
     var inverted = parts[0].substr(0,1) === '!';
@@ -18,11 +21,12 @@ module.exports = function(rules) {
     }
 
     return {
-      regex    : new RegExp(parts[0]),
-      replace  : parts[1],
-      inverted : inverted,
-      last     : typeof parts[2] !== 'undefined' ? /L/g.test(parts[2]) : false,
-      proxy    : typeof parts[2] !== 'undefined' ? /P/.test(parts[2]) : false
+      regex          : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
+      replace        : parts[1],
+      inverted       : inverted,
+      last           : typeof parts[2] !== 'undefined' ? /L/.test(flags) : false,
+      proxy          : typeof parts[2] !== 'undefined' ? /P/.test(flags) : false,
+      redirect       : typeof parts[2] !== 'undefined' ? /R/.test(flags) : false
     };
 
   });
@@ -30,55 +34,74 @@ module.exports = function(rules) {
   return function(req, res, next) {
 
     var protocol = req.connection.encrypted ? 'https' : 'http'
-    var request = require(protocol).request;
+      , request  = require(protocol).request
+      , _next    = true;
 
     rules.some(function(rewrite) {
       var location = protocol + '://' + req.headers.host + rewrite.replace;
       // Rewrite Url
-      if(rewrite.proxy) {
-        var opts = url.parse(rewrite.replace);
-        // options request
-        opts.method      = req.method;
-        opts.headers     = req.headers;
+      if(rewrite.regex.test(req.url) && rewrite.proxy) {
+        var opts     = url.parse(rewrite.replace);
+        opts.path    = opts.pathname + '/';
+        opts.method  = req.method;
+        opts.headers = req.headers;
         var via = '1.1 ' + require('os').hostname();
         if(req.headers.via) {
            via = req.headers.via + ', ' + via;
         }
         opts.headers.via = via;
 
-        // Forwarding the host breaks dotcloud
         delete opts.headers['host'];
 
         var _req = request(opts, function (_res) {
           _res.headers.via = via;
-          resp.writeHead(_res.statusCode, _res.headers);
+          res.writeHead(_res.statusCode, _res.headers);
           _res.on('error', function (err) {
             next(err);
           });
-          _res.pipe(resp);
+          _res.pipe(res);
         });
-        _res.on('error', function (err) {
+        _req.on('error', function (err) {
           next(err);
         });
-        if (!req.readable) {
-          _res.end();
+        if(!req.readable) {
+          _req.end();
         } else {
-          req.pipe(_res);
+          req.pipe(_req);
         }
+        _next = false;
+        return true;
+      } else if(rewrite.regex.test(req.url) && rewrite.redirect) {
+        if(res.redirect) {
+          res.redirect(rewrite.replace);
+        } else {
+          var location;
+          if(/\w+:\/\//.test(rewrite.replace)) {
+            location = rewrite.replace;
+          } else {
+            location = protocol + '://' + req.headers.host + rewrite.replace
+          }
+          res.writeHead(301, {
+            Location : rewrite.replace
+          });
+          res.end();
+        }
+        _next = false;
         return true;
       } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
         res.setHeader('Location', location);
         req.url = rewrite.replace;
         return rewrite.last;
-      } else if(rewrite.regex.test(req.url)  && !rewrite.inverted) {
+      } else if(rewrite.regex.test(req.url) && !rewrite.inverted) {
         res.setHeader('Location', location);
         req.url = req.url.replace(rewrite.regex, rewrite.replace);
         return rewrite.last;
       }
 
     });
-
-    next();
+    if(_next) {
+      next();
+    }
 
   };
 }

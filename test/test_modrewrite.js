@@ -4,7 +4,7 @@ var chai   = require( 'chai' ),
     exec   = require('child_process').exec;
 
 describe('connect-modrewrite', function() {
-  this.timeout(10000);
+  this.timeout(20000);
   it('should response to one level path', function(done) {
     http.get('http://localhost:9001/test', function(res){
       res.setEncoding('utf8');
@@ -63,6 +63,32 @@ describe('connect-modrewrite', function() {
   it('should be able to handle inverted urls 2', function() {
     http.get('http://localhost:9001/test-defined-params/style.css', function(res) {
       expect(res.statusCode).to.equal(200);
+    });
+  });
+
+  it('should be able to handle redirects', function(done) {
+    http.get('http://localhost:9001/test/redirect', function(res) {
+      expect(res.statusCode).to.equal(301);
+      done();
+    });
+  });
+
+  it('should be able to handle proxy flags', function(done) {
+    http.get('http://localhost:9001/test/proxy', function(res) {
+      expect(res.statusCode).to.equal(200);
+      expect(res.headers.via).to.be.ok;
+      done();
+    });
+  });
+
+  it('should be able to handle nocase flags', function(done) {
+    http.get('http://localhost:9001/test/NOCASE', function(res) {
+      expect(res.statusCode).to.equal(200);
+      res.setEncoding('utf8');
+      res.on('data', function(chunk) {
+        expect(chunk).to.have.string('it is working');
+        done();
+      });
     });
   });
 

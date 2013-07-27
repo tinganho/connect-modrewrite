@@ -38,8 +38,18 @@ module.exports = function(grunt) {
             return [
               urlRewrite([
 
+                // Test basics
                 '^/test$ /index.html',
                 '^/test/\\d*$ /index.html [L]',
+
+                // Test nocase
+                '^/test/nocase$ /nocase.html [NC, L]',
+
+                // Test Proxy
+                '^/test/proxy$ http://nodejs.org [P]',
+
+                // Test redirect flag
+                '^/test/redirect$ http://nodejs.org [R]',
 
                 // Test last flag
                 '^/test-flag$ /connection [L]',

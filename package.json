@@ -30,7 +30,6 @@
     "grunt-contrib-jshint": "~0.1.0",
     "grunt": "~0.4.0",
     "grunt-contrib-connect": "~0.1.0",
-    "grunt-bump": "0.0.1",
     "chai": "~1.4.2",
     "mocha": "~1.8.1"
   },
@@ -42,8 +41,5 @@
     "grunt-contrib",
     "grunt-contrib-connect",
     "modrewrite"
-  ],
-  "dependencies": {
-    "extend": "~1.1.3"
-  }
+  ]
 }

@@ -49,7 +49,7 @@ If a path matches, any subsequent rewrite rules will be disregarded.
 ### Proxy [P]
 Proxy your requests
 ```javasript
-'^/test/proxy/(.*)$ http://nodejs.org/$1 [L]'
+'^/test/proxy/(.*)$ http://nodejs.org/$1 [P]'
 ```
 
 ### Redirect [R]

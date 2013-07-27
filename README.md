@@ -46,6 +46,18 @@ Just wrap the defined param with `()` and access it with `$n`. This is defined i
 ### Last [L]
 If a path matches, any subsequent rewrite rules will be disregarded.
 
+### Proxy [P]
+Proxy your requests
+```javasript
+'^/test/proxy/(.*)$ http://nodejs.org/$1 [L]'
+```
+
+### Redirect [NC]
+Issue a redirect for request
+
+### Nocase [NC]
+Regex match will be case-insensitive
+
 ## Authors
 Tingan Ho, tingan87[at]gmail.com
 

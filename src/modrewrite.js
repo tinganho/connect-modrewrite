@@ -75,11 +75,8 @@ module.exports = function(rules) {
         if(res.redirect) {
           res.redirect(rewrite.replace);
         } else {
-          var location;
           if(/\w+:\/\//.test(rewrite.replace)) {
             location = rewrite.replace;
-          } else {
-            location = protocol + '://' + req.headers.host + rewrite.replace
           }
           res.writeHead(301, {
             Location : rewrite.replace

@@ -21,7 +21,8 @@ module.exports = function(grunt) {
         browser: true,
         camelcase: true,
         unused: true,
-        node: true
+        node: true,
+        laxcomma: true
       },
       files: [
         'src/**/*.js'

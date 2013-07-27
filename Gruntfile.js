@@ -46,11 +46,21 @@ module.exports = function(grunt) {
                 // Test nocase
                 '^/test/nocase$ /nocase.html [NC, L]',
 
+                // Test forbidden
+                '^/test/forbidden$ [F]',
+
+                // Test gone
+                '^/test/gone$ [G]',
+
+                // Test type
+                '^/test/type$ /image [T=image/png, L]',
+
                 // Test Proxy
                 '^/test/proxy$ http://nodejs.org [P]',
 
                 // Test redirect flag
                 '^/test/redirect$ http://nodejs.org [R]',
+                '^/test/redirect-309$ http://nodejs.org [R=309]',
 
                 // Test last flag
                 '^/test-flag$ /connection [L]',

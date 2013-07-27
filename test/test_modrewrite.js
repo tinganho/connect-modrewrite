@@ -17,7 +17,6 @@ describe('connect-modrewrite', function() {
 
 
   it('should be able to recognize Last [L] flag', function(done) {
-
     var doneRequest = 0;
     http.get('http://localhost:9001/test-flag', function(res) {
       expect(res.statusCode).to.equal(404);
@@ -73,6 +72,13 @@ describe('connect-modrewrite', function() {
     });
   });
 
+  it('should be able to handle redirects with specified status code', function(done) {
+    http.get('http://localhost:9001/test/redirect-309', function(res) {
+      expect(res.statusCode).to.equal(309);
+      done();
+    });
+  });
+
   it('should be able to handle proxy flags', function(done) {
     http.get('http://localhost:9001/test/proxy', function(res) {
       expect(res.statusCode).to.equal(200);
@@ -92,6 +98,26 @@ describe('connect-modrewrite', function() {
     });
   });
 
+  it('should be able to handle forbidden flags', function(done) {
+    http.get('http://localhost:9001/test/forbidden', function(res) {
+      expect(res.statusCode).to.equal(403);
+      done();
+    });
+  });
 
+  it('should be able to handle gone flags', function(done) {
+    http.get('http://localhost:9001/test/gone', function(res) {
+      expect(res.statusCode).to.equal(410);
+      done();
+    });
+  });
+
+  it('should be able to handle type flags', function(done) {
+    http.get('http://localhost:9001/test/type', function(res) {
+      console.log(res.headers);
+      expect(res.headers['content-type']).to.have.string('image/png');
+      done();
+    });
+  });
 
 });

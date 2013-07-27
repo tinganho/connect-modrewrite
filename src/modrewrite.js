@@ -24,15 +24,17 @@ module.exports = function(rules) {
       regex          : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
       replace        : parts[1],
       inverted       : inverted,
-      last           : typeof parts[2] !== 'undefined' ? /L/.test(flags) : false,
-      proxy          : typeof parts[2] !== 'undefined' ? /P/.test(flags) : false,
-      redirect       : typeof parts[2] !== 'undefined' ? /R/.test(flags) : false
+      last           : /L/.test(flags),
+      proxy          : /P/.test(flags),
+      redirect       : /R=?(\d+)?/.test(flags) ? (typeof /R=?(\d+)?/.exec(flags)[1] !== 'undefined' ? /R=?(\d+)?/.exec(flags)[1] : 301) : false,
+      forbidden      : /F/.test(flags),
+      gone           : /G/.test(flags),
+      type           : /T=([\w|\/]+)/.test(flags) ? (typeof /T=([\w|\/]+)/.exec(flags)[1] !== 'undefined' ? /T=([\w|\/]+)/.exec(flags)[1] : 'text/plain') : false,
     };
 
   });
 
   return function(req, res, next) {
-
     var protocol = req.connection.encrypted ? 'https' : 'http'
       , request  = require(protocol).request
       , _next    = true;
@@ -40,7 +42,20 @@ module.exports = function(rules) {
     rules.some(function(rewrite) {
       var location = protocol + '://' + req.headers.host + rewrite.replace;
       // Rewrite Url
-      if(rewrite.regex.test(req.url) && rewrite.proxy) {
+      if(rewrite.regex.test(req.url) && rewrite.type) {
+        res.setHeader('Content-Type', rewrite.type);
+      }
+      if(rewrite.regex.test(req.url) && rewrite.gone) {
+        res.writeHead(410);
+        res.end();
+        _next = false;
+        return true;
+      } else if(rewrite.regex.test(req.url) && rewrite.forbidden) {
+        res.writeHead(403);
+        res.end();
+        _next = false;
+        return true;
+      } else if(rewrite.regex.test(req.url) && rewrite.proxy) {
         var opts     = url.parse(rewrite.replace);
         opts.path    = opts.pathname + '/';
         opts.method  = req.method;
@@ -72,17 +87,10 @@ module.exports = function(rules) {
         _next = false;
         return true;
       } else if(rewrite.regex.test(req.url) && rewrite.redirect) {
-        if(res.redirect) {
-          res.redirect(rewrite.replace);
-        } else {
-          if(/^\w+:\/\//.test(rewrite.replace)) {
-            location = rewrite.replace;
-          }
-          res.writeHead(301, {
-            Location : rewrite.replace
-          });
-          res.end();
-        }
+        res.writeHead(rewrite.redirect, {
+          Location : location
+        });
+        res.end();
         _next = false;
         return true;
       } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {

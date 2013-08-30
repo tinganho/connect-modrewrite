@@ -1,6 +1,7 @@
 
 
-var url = require('url');
+var url         = require('url')
+  , querystring = require('querystring');
 
 module.exports = function(rules) {
 
@@ -104,6 +105,12 @@ module.exports = function(rules) {
       }
 
     });
+
+    // Add to query object
+    if(/\?.*/.test(req.url)) {
+      req.params = req.query = querystring.parse(/\?(.*)/.exec(req.url)[1]);
+    }
+
     if(_next) {
       next();
     }

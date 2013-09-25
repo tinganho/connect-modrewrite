@@ -1,4 +1,4 @@
-var chai   = require( 'chai' ),
+var chai   = require('chai'),
     expect = chai.expect,
     http   = require('http'),
     exec   = require('child_process').exec;

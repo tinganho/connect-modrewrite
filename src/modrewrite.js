@@ -41,7 +41,7 @@ module.exports = function(rules) {
       , _next    = true;
 
     rules.some(function(rewrite) {
-      var location = protocol + '://' + req.headers.host + rewrite.replace;
+      var location = protocol + '://' + req.headers.host + req.url.replace(rewrite.regex, rewrite.replace);
       // Rewrite Url
       if(rewrite.regex.test(req.url) && rewrite.type) {
         res.setHeader('Content-Type', rewrite.type);

@@ -10,9 +10,9 @@ module.exports = function(rules) {
   rules = (rules || []).map(function(rule) {
 
     var parts = rule.replace(/\s+|\t+/g, ' ').split(' ');
-    var flags = '';
-    if(/\[(.*)\]/.test(rule)) {
-      flags = /\[(.*)\]/.exec(rule)[1];
+    var flags = '', flagRegex = /\[(.*)\]$/;
+    if(flagRegex.test(rule)) {
+      flags = flagRegex.exec(rule)[1];
     }
 
     // Check inverted urls

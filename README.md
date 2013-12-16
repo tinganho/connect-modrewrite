@@ -77,3 +77,7 @@ Tingan Ho, tingan87[at]gmail.com
 ## License
 Copyright (c) 2012 Tingan Ho
 Licensed under the MIT license.
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/tinganho/connect-modrewrite/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+

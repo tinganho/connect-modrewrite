@@ -1,5 +1,8 @@
 connect-modrewrite [![Build Status](https://travis-ci.org/tinganho/connect-modrewrite.png)](https://travis-ci.org/tinganho/connect-modrewrite)
 ========================
+
+[![NPM](https://nodei.co/npm/connect-modrewrite.png?downloads=true&stars=true)](https://nodei.co/npm/connect-modrewrite/)
+
 `connect-modrewrite` adds modrewrite functionality to connect/express server.
 
 # Getting started

@@ -59,11 +59,8 @@ module.exports = function(rules) {
       } else if(rewrite.regex.test(req.url) && rewrite.proxy) {
         var opts     = url.parse(req.url.replace(rewrite.regex, rewrite.replace));
         var query    = (opts.search != null) ? opts.search : '';
-        if(query === '') {
-          opts.path = opts.pathname;
-        }
-        else {
-          opts.path = opts.pathname + '/' + query;
+        if(query) {
+          opts.path = opts.pathname + query;
         }
         opts.method  = req.method;
         opts.headers = req.headers;

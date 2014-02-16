@@ -36,7 +36,7 @@ module.exports = function(rules) {
   });
 
   return function(req, res, next) {
-    var protocol = req.connection.encrypted ? 'https' : 'http'
+    var protocol = req.connection.encrypted || req.header('x-forwarded-proto') == 'https' ? 'https' : 'http'
       , request  = require(protocol).request
       , _next    = true;
 

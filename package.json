@@ -1,6 +1,6 @@
 {
   "name": "connect-modrewrite",
-  "main": "./src/modrewrite.js",
+  "main": "./index.js",
   "version": "0.5.12",
   "description": "connect-modrewrite adds modrewrite functionality to connect/express server",
   "author": {

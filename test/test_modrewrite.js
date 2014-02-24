@@ -118,5 +118,4 @@ describe('connect-modrewrite', function() {
       done();
     });
   });
-
 });

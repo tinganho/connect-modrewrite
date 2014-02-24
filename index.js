@@ -1,14 +1,21 @@
 
+/**
+ * Module dependencies
+ */
 
 var url = require('url')
   , querystring = require('querystring');
 
-module.exports = function(rules) {
+/**
+ * Get flags from rule rules
+ *
+ * @param {Array.<rules>} rules
+ * @return {Object}
+ * @api private
+ */
 
-  'use strict';
-
+function _parse(rules) {
   rules = (rules || []).map(function(rule) {
-
     var parts = rule.replace(/\s+|\t+/g, ' ').split(' ');
     var flags = '', flagRegex = /\[(.*)\]$/;
     if(flagRegex.test(rule)) {
@@ -22,42 +29,58 @@ module.exports = function(rules) {
     }
 
     return {
-      regex          : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
-      replace        : parts[1],
-      inverted       : inverted,
-      last           : /L/.test(flags),
-      proxy          : /P/.test(flags),
-      redirect       : /R=?(\d+)?/.test(flags) ? (typeof /R=?(\d+)?/.exec(flags)[1] !== 'undefined' ? /R=?(\d+)?/.exec(flags)[1] : 301) : false,
-      forbidden      : /F/.test(flags),
-      gone           : /G/.test(flags),
-      type           : /T=([\w|\/]+)/.test(flags) ? (typeof /T=([\w|\/]+)/.exec(flags)[1] !== 'undefined' ? /T=([\w|\/]+)/.exec(flags)[1] : 'text/plain') : false,
+      regex : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
+      replace : parts[1],
+      inverted : inverted,
+      last : /L/.test(flags),
+      proxy : /P/.test(flags),
+      redirect : /R=?(\d+)?/.test(flags) ? (typeof /R=?(\d+)?/.exec(flags)[1] !== 'undefined' ? /R=?(\d+)?/.exec(flags)[1] : 301) : false,
+      forbidden : /F/.test(flags),
+      gone : /G/.test(flags),
+      type : /T=([\w|\/]+)/.test(flags) ? (typeof /T=([\w|\/]+)/.exec(flags)[1] !== 'undefined' ? /T=([\w|\/]+)/.exec(flags)[1] : 'text/plain') : false,
     };
-
   });
+};
+
+module.exports = function(rules) {
+  rules = _parse(rules);
 
   return function(req, res, next) {
     var protocol = req.connection.encrypted || req.header('x-forwarded-proto') == 'https' ? 'https' : 'http'
-      , request  = require(protocol).request
-      , _next    = true;
+      , request = require(protocol).request
+      , _next = true;
 
-    rules.some(function(rewrite) {
-      var location = protocol + '://' + req.headers.host + req.url.replace(rewrite.regex, rewrite.replace);
-      // Rewrite Url
-      if(rewrite.regex.test(req.url) && rewrite.type) {
-        res.setHeader('Content-Type', rewrite.type);
+    rules.some(function(rule) {
+      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regex, rule.replace);
+        , match = rule.regex.test(req.url);
+
+
+      if(!match) {
+        if(rule.inverted) {
+          req.url = rule.replace;
+          return rule.last;
+        }
+        return false;
       }
-      if(rewrite.regex.test(req.url) && rewrite.gone) {
+
+      // Rewrite Url
+      if(rule.type) {
+        res.setHeader('Content-Type', rule.type);
+      }
+      if(rule.gone) {
         res.writeHead(410);
         res.end();
         _next = false;
         return true;
-      } else if(rewrite.regex.test(req.url) && rewrite.forbidden) {
+      }
+      if(rule.forbidden) {
         res.writeHead(403);
         res.end();
         _next = false;
         return true;
-      } else if(rewrite.regex.test(req.url) && rewrite.proxy) {
-        var opts     = url.parse(req.url.replace(rewrite.regex, rewrite.replace));
+      }
+      if(match && rule.proxy) {
+        var opts     = url.parse(req.url.replace(rule.regex, rule.replace));
         var query    = (opts.search != null) ? opts.search : '';
         if(query) {
           opts.path = opts.pathname + query;
@@ -90,23 +113,19 @@ module.exports = function(rules) {
         }
         _next = false;
         return true;
-      } else if(rewrite.regex.test(req.url) && rewrite.redirect) {
-        res.writeHead(rewrite.redirect, {
+      }
+      if(rule.redirect) {
+        res.writeHead(rule.redirect, {
           Location : location
         });
         res.end();
         _next = false;
         return true;
-      } else if(!rewrite.regex.test(req.url) && rewrite.inverted) {
-        res.setHeader('Location', location);
-        req.url = rewrite.replace;
-        return rewrite.last;
-      } else if(rewrite.regex.test(req.url) && !rewrite.inverted) {
-        res.setHeader('Location', location);
-        req.url = req.url.replace(rewrite.regex, rewrite.replace);
-        return rewrite.last;
       }
-
+      if(!rule.inverted) {
+        req.url = req.url.replace(rule.regex, rule.replace);
+        return rule.last;
+      }
     });
 
     // Add to query object

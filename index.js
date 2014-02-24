@@ -197,7 +197,5 @@ function _getRequestOpts(req, rule) {
   }
   opts.headers.via = via;
 
-  delete opts.headers['host'];
-
   return opts;
 };

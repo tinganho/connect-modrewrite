@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
 echo 'Testing modrewrite functionality...'
-./node_modules/mocha/bin/mocha test/test_modrewrite.js
+./node_modules/mocha/bin/mocha test/test.js

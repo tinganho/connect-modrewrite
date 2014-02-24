@@ -59,7 +59,12 @@ module.exports = function(rules) {
 
       // Proxy
       if(rule.proxy) {
-        _proxy();
+        _proxy(rule, {
+          protocol : protocol,
+          req : req,
+          res : res,
+          next : next
+        });
         callNext = false;
         return true;
       }
@@ -104,8 +109,9 @@ module.exports = function(rules) {
 
 function _parse(rules) {
   return (rules || []).map(function(rule) {
-    var parts = rule.replace(/\s+|\t+/g, ' ').split(' ');
-    var flags = '', flagRegex = /\[(.*)\]$/;
+    var parts = rule.replace(/\s+|\t+/g, ' ').split(' ')
+      , flags = '', flagRegex = /\[(.*)\]$/;
+
     if(flagRegex.test(rule)) {
       flags = flagRegex.exec(rule)[1];
     }
@@ -130,23 +136,33 @@ function _parse(rules) {
   });
 };
 
+/**
+ * Proxy the request
+ *
+ * @param {Object} rule
+ * @param {Object} metas
+ * @return {void}
+ * @api private
+ */
 
-function _proxy(rule, req, res, protocol) {
-  var opts = _getRequestOpts(req, rule);
+function _proxy(rule, metas) {
+  var opts = _getRequestOpts(metas.req, metas.rule);
     , request = protocol === 'http' : httpReq : httpsReq;
 
   var pipe = request(opts, function (_res) {
     pipe.headers.via = via;
-    res.writeHead(_res.statusCode, _res.headers);
+    metas.res.writeHead(_res.statusCode, _res.headers);
     pipe.on('error', function (err) {
       next(err);
     });
-    pipe.pipe(res);
+    pipe.pipe(metas.res);
   });
+
   pipe.on('error', function (err) {
-    next(err);
+    metas.next(err);
   });
-  if(!req.readable) {
+
+  if(!metas.req.readable) {
     pipe.end();
   }
   else {
@@ -174,7 +190,7 @@ function _getRequestOpts(req, rule) {
   opts.headers = req.headers;
   var via = '1.1 ' + hostname;
   if(req.headers.via) {
-     via = req.headers.via + ', ' + via;
+    via = req.headers.via + ', ' + via;
   }
   opts.headers.via = via;
 

@@ -150,11 +150,14 @@ function _proxy(rule, metas) {
     , request = protocol === 'http' : httpReq : httpsReq;
 
   var pipe = request(opts, function (res) {
-    pipe.headers.via = via;
+    pipe.headers.via = opts.headers.via;
+
     metas.res.writeHead(res.statusCode, res.headers);
+
     pipe.on('error', function (err) {
       metas.next(err);
     });
+
     pipe.pipe(metas.res);
   });
 

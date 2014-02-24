@@ -22,7 +22,7 @@ module.exports = function(rules) {
       , callNext = true;
 
     rules.some(function(rule) {
-      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regex, rule.replace);
+      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regex, rule.replace)
         , match = rule.regex.test(req.url);
 
       // If not match
@@ -146,8 +146,8 @@ function _parse(rules) {
  */
 
 function _proxy(rule, metas) {
-  var opts = _getRequestOpts(metas.req, metas.rule);
-    , request = protocol === 'http' : httpReq : httpsReq;
+  var opts = _getRequestOpts(metas.req, metas.rule)
+    , request = protocol === 'http' ? httpReq : httpsReq;
 
   var pipe = request(opts, function (res) {
     pipe.headers.via = opts.headers.via;

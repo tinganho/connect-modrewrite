@@ -29,7 +29,6 @@
   "devDependencies": {
     "grunt-contrib-jshint": "~0.1.0",
     "grunt": "~0.4.0",
-    "grunt-contrib-connect": "~0.1.0",
     "chai": "~1.4.2",
     "mocha": "~1.8.1"
   },
@@ -37,9 +36,6 @@
     "test": "./bin/test"
   },
   "keywords": [
-    "gruntplugin",
-    "grunt-contrib",
-    "grunt-contrib-connect",
     "modrewrite"
   ],
   "dependencies": {}

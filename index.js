@@ -7,7 +7,7 @@ var url = require('url')
   , querystring = require('querystring')
   , httReq = require('http').request
   , httpsReq = require('https').request
-  , via = '1.1 ' + require('os').hostname();
+  , defaultVia = '1.1 ' + require('os').hostname();
 
 /**
  * Export `API`
@@ -188,7 +188,7 @@ function _getRequestOpts(req, rule) {
   }
   opts.method  = req.method;
   opts.headers = req.headers;
-  var via = '1.1 ' + hostname;
+  var via = defaultVia;
   if(req.headers.via) {
     via = req.headers.via + ', ' + via;
   }

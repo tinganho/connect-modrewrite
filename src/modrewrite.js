@@ -1,6 +1,6 @@
 
 
-var url         = require('url')
+var url = require('url')
   , querystring = require('querystring');
 
 module.exports = function(rules) {

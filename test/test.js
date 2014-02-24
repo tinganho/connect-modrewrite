@@ -21,7 +21,7 @@ chai.use(sinonChai);
 
 describe('Connect-modrewrite', function() {
   describe('last flag', function() {
-    it('should not go to next rewrite rule', function() {
+    it('should not go to next rewrite rule if the current matches', function() {
       var middleware = modRewrite(['/a /b [L]', '/a /c']);
       var req = {
         connection : { encrypted : false },

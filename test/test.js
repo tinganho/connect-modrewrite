@@ -297,7 +297,7 @@ describe('Connect-modrewrite', function() {
 
   describe('proxy', function() {
     it('should proxy request whenever proxy flag is set', function() {
-      var httpReq = { on : sinon.spy(), end : sinon.spy() };
+      var httpReq = { on : sinon.spy(), end : sinon.spy() headers : {} };
       var requestStub = sinon.stub().returns(httpReq);
       var modRewrite = proxyquire('../', { http : { request : requestStub }});
       var middleware = modRewrite(['/a http://test1.com/ [P]']);

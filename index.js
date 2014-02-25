@@ -153,25 +153,17 @@ function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule)
     , request = metas.protocol === 'http' ? httpReq : httpsReq;
 
-  console.log('hej');
   var pipe = request(opts, function (res) {
-    pipe.headers.via = opts.headers.via;
-
+    pipe._headers.via = opts.headers.via;
     metas.res.writeHead(res.statusCode, res.headers);
-
-    pipe.pipe(metas.res);
+    res.pipe(metas.res);
   });
 
   pipe.on('error', function (err) {
     metas.next(err);
   });
 
-  if(!metas.req.readable) {
-    pipe.end();
-  }
-  else {
-    metas.req.pipe(pipe);
-  }
+  pipe.end();
 }
 
 /**

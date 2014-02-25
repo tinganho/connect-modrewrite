@@ -2,16 +2,17 @@
 /**
  * Module dependencies.
  */
+
 var modRewrite = require('../')
   , sinon = require('sinon')
   , chai = require('chai')
-  , expect = require('chai').expect;
+  , expect = require('chai').expect
+  , sinonChai = require('sinon-chai');
 
 /**
  * Plugins.
  */
 
-var sinonChai = require('sinon-chai');
 chai.should();
 chai.use(sinonChai);
 
@@ -19,7 +20,27 @@ chai.use(sinonChai);
  * Specs.
  */
 
+
 describe('Connect-modrewrite', function() {
+  describe('non-match', function() {
+    it('should should leave the url unrewritten if there is no match', function() {
+      var middleware = modRewrite(['/a /b [L]', '/a /c']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/d'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/d');
+    });
+  });
+
   describe('last flag', function() {
     it('should not go to next rewrite rule if the current matches', function() {
       var middleware = modRewrite(['/a /b [L]', '/a /c']);
@@ -30,12 +51,249 @@ describe('Connect-modrewrite', function() {
         url : '/a'
       };
       var res = {
-        writeHead : sinon.spy(),
-        end : sinon.spy()
+        writeHead : function() {},
+        end : function() {}
       };
-      var next = sinon.spy();
+      var next = function() {};
       middleware(req, res, next);
       expect(req.url).to.equal('/b');
     });
+
+    it('should go to to the next rewrite rule if the current doesn\'t matches', function() {
+      var middleware = modRewrite(['/a /b [L]', '/b /c']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/b'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/c');
+    });
+  });
+
+  describe('invert', function() {
+    it('should rewrite if the pattern doesn\'t match', function() {
+      var middleware = modRewrite(['!/a /b [L]', '/b /c']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/b'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/b');
+    });
+
+    it('shouldn\'t rewrite if the pattern match', function() {
+      var middleware = modRewrite(['!/a /b [L]', '/b /c']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/b'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.not.equal('/c');
+    });
+  });
+
+  describe('type', function() {
+    it('should set content-type header if type flag is set', function() {
+      var middleware = modRewrite(['!/ /b [T=image/jpeg]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/b'
+      };
+      var res = {
+        setHeader : sinon.spy(),
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.setHeader.should.have.been.calledWith('Content-Type', 'image/jpeg');
+    });
+
+    it('should not do anything the type flag is not set', function() {
+      var middleware = modRewrite(['/a /b [L]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : sinon.spy(),
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.setHeader.should.not.have.been.called;
+    });
+  });
+
+  describe('gone', function() {
+    it('should set status code to 410', function() {
+      var middleware = modRewrite(['/a [G]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.have.been.calledWith(410);
+      res.end.should.have.been.calledOnce;
+      res.end.should.have.been.calledAfter(res.writeHead);
+    });
+
+    it('should not do anything if gone flag is not set', function() {
+      var middleware = modRewrite(['/a [G]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/d'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.not.have.been.called;
+      res.end.should.not.have.been.called;
+    });
+  });
+
+  describe('forbidden', function() {
+    it('should set status code to 403', function() {
+      var middleware = modRewrite(['/a [F]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.have.been.calledWith(403);
+      res.end.should.have.been.calledOnce;
+      res.end.should.have.been.calledAfter(res.writeHead);
+    });
+
+    it('should not do anything if gone flag is not set', function() {
+      var middleware = modRewrite(['/a [F]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/d'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.not.have.been.called;
+      res.end.should.not.have.been.called;
+    });
+  });
+
+  describe('redirect', function() {
+    it('should set default status code to 301 if rewrite flag is set', function() {
+      var middleware = modRewrite(['/a /b [R]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.have.been.calledWith(301, { Location : 'http://test.com/b'});
+      res.end.should.have.been.calledOnce;
+      res.end.should.have.been.calledAfter(res.writeHead);
+    });
+
+    it('should set custom status code if rewrite custom flag is set', function() {
+      var middleware = modRewrite(['/a /b [R=307]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.have.been.calledWith('307', { Location : 'http://test.com/b'});
+      res.end.should.have.been.calledOnce;
+      res.end.should.have.been.calledAfter(res.writeHead);
+    });
+
+    it('should not do anything if rewrite flag is not set', function() {
+      var middleware = modRewrite(['/a /b [R=307]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/d'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.not.have.been.called;
+      res.end.should.not.have.been.called;
+    });
+  });
+
+  describe('proxy', function() {
   });
 });

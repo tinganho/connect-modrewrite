@@ -5,7 +5,7 @@
 
 var url = require('url')
   , querystring = require('querystring')
-  , httReq = require('http').request
+  , httpReq = require('http').request
   , httpsReq = require('https').request
   , defaultVia = '1.1 ' + require('os').hostname();
 
@@ -18,12 +18,12 @@ module.exports = function(rules) {
   rules = _parse(rules);
 
   return function(req, res, next) {
-    var protocol = req.connection.encrypted || req.header('x-forwarded-proto') == 'https' ? 'https' : 'http'
+    var protocol = req.connection.encrypted || req.header('x-forwarded-proto') === 'https' ? 'https' : 'http'
       , callNext = true;
 
     rules.some(function(rule) {
-      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regex, rule.replace)
-        , match = rule.regex.test(req.url);
+      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace)
+        , match = rule.regexp.test(req.url);
 
       // If not match
       if(!match) {
@@ -81,7 +81,7 @@ module.exports = function(rules) {
 
       // Rewrite
       if(!rule.inverted) {
-        req.url = req.url.replace(rule.regex, rule.replace);
+        req.url = req.url.replace(rule.regexp, rule.replace);
         return rule.last;
       }
     });
@@ -122,8 +122,10 @@ function _parse(rules) {
       parts[0] = parts[0].substr(1);
     }
 
+    /* jshint ignore:start */
+
     return {
-      regex : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
+      regexp : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
       replace : parts[1],
       inverted : inverted,
       last : /L/.test(flags),
@@ -133,8 +135,10 @@ function _parse(rules) {
       gone : /G/.test(flags),
       type : /T=([\w|\/]+)/.test(flags) ? (typeof /T=([\w|\/]+)/.exec(flags)[1] !== 'undefined' ? /T=([\w|\/]+)/.exec(flags)[1] : 'text/plain') : false,
     };
+
+    /* jshint ignore:end */
   });
-};
+}
 
 /**
  * Proxy the request
@@ -146,17 +150,14 @@ function _parse(rules) {
  */
 
 function _proxy(rule, metas) {
-  var opts = _getRequestOpts(metas.req, metas.rule)
-    , request = protocol === 'http' ? httpReq : httpsReq;
+  var opts = _getRequestOpts(metas.req, rule)
+    , request = metas.protocol === 'http' ? httpReq : httpsReq;
 
+  console.log('hej');
   var pipe = request(opts, function (res) {
     pipe.headers.via = opts.headers.via;
 
     metas.res.writeHead(res.statusCode, res.headers);
-
-    pipe.on('error', function (err) {
-      metas.next(err);
-    });
 
     pipe.pipe(metas.res);
   });
@@ -169,9 +170,9 @@ function _proxy(rule, metas) {
     pipe.end();
   }
   else {
-    req.pipe(pipe);
+    metas.req.pipe(pipe);
   }
-};
+}
 
 /**
  * Get request options
@@ -183,7 +184,7 @@ function _proxy(rule, metas) {
  */
 
 function _getRequestOpts(req, rule) {
-  var opts = url.parse(req.url.replace(rule.regex, rule.replace))
+  var opts = url.parse(req.url.replace(rule.regexp, rule.replace))
     , query = (opts.search != null) ? opts.search : '';
 
   if(query) {
@@ -198,4 +199,4 @@ function _getRequestOpts(req, rule) {
   opts.headers.via = via;
 
   return opts;
-};
+}

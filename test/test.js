@@ -7,6 +7,7 @@ var modRewrite = require('../')
   , sinon = require('sinon')
   , chai = require('chai')
   , expect = require('chai').expect
+  , proxyquire = require('proxyquire')
   , sinonChai = require('sinon-chai');
 
 /**
@@ -295,5 +296,30 @@ describe('Connect-modrewrite', function() {
   });
 
   describe('proxy', function() {
+    it('should proxy request whenever proxy flag is set', function() {
+      var httpReq = { on : sinon.spy(), end : sinon.spy() };
+      var requestStub = sinon.stub().returns(httpReq);
+      var modRewrite = proxyquire('../', { http : { request : requestStub }});
+      var middleware = modRewrite(['/a http://test1.com/ [P]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test2.com' },
+        url : '/a',
+        pipe : function() {}
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(requestStub.args[0][0].host).to.eql('test1.com');
+      expect(requestStub.args[0][0].hostname).to.eql('test1.com');
+      expect(requestStub.args[0][0].href).to.eql('http://test1.com/');
+      expect(requestStub.args[0][0].headers.via).to.have.string('1.1');
+      httpReq.end.should.have.been.calledOnce;
+    });
   });
 });

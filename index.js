@@ -18,7 +18,7 @@ module.exports = function(rules) {
   rules = _parse(rules);
 
   return function(req, res, next) {
-    var protocol = req.connection.encrypted || req.header('x-forwarded-proto') === 'https' ? 'https' : 'http'
+    var protocol = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
       , callNext = true;
 
     rules.some(function(rule) {

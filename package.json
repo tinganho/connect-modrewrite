@@ -1,7 +1,7 @@
 {
   "name": "connect-modrewrite",
   "main": "./index.js",
-  "version": "0.6.1-pre",
+  "version": "0.6.2-pre",
   "description": "connect-modrewrite adds modrewrite functionality to connect/express server",
   "author": {
     "name": "Tingan Ho",

@@ -156,6 +156,9 @@ function _proxy(rule, metas) {
   var pipe = request(opts, function (res) {
     pipe._headers.via = opts.headers.via;
     metas.res.writeHead(res.statusCode, res.headers);
+    res.on('error', function (err) {
+      metas.next(err);
+    });
     res.pipe(metas.res);
   });
 
@@ -163,7 +166,11 @@ function _proxy(rule, metas) {
     metas.next(err);
   });
 
-  pipe.end();
+  if(!metas.req.readable) {
+    pipe.end();
+  } else {
+    metas.req.pipe(pipe);
+  }
 }
 
 /**
@@ -176,7 +183,7 @@ function _proxy(rule, metas) {
  */
 
 function _getRequestOpts(req, rule) {
-  var opts = url.parse(req.url.replace(rule.regexp, rule.replace))
+  var opts = url.parse(req.url.replace(rule.regexp, rule.replace), true)
     , query = (opts.search != null) ? opts.search : '';
 
   if(query) {
@@ -189,6 +196,8 @@ function _getRequestOpts(req, rule) {
     via = req.headers.via + ', ' + via;
   }
   opts.headers.via = via;
+
+  delete opts.headers['host'];
 
   return opts;
 }

@@ -151,7 +151,7 @@ function _parse(rules) {
 
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule)
-    , request = metas.protocol === 'http' ? httpReq : httpsReq;
+    , request = /^https/.test(rule.replace) ? httpsReq : httpReq;
 
   var pipe = request(opts, function (res) {
     res.headers.via = opts.headers.via;

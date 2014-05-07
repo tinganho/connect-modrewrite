@@ -25,6 +25,12 @@ module.exports = function(rules) {
       var location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace)
         , match = rule.regexp.test(req.url);
 
+      if(rule.host) {
+        if(!rule.host.test(req.headers.host)) {
+          return false;
+        }
+      }
+
       // If not match
       if(!match) {
         // Inverted rewrite
@@ -98,6 +104,19 @@ module.exports = function(rules) {
   };
 };
 
+/**
+ * Regular expression flags
+ */
+
+var noCaseSyntax = /NC/
+  , lastSyntax = /L/
+  , proxySyntax = /P/
+  , redirectSyntax = /R=?(\d+)?/
+  , forbiddenSyntax = /F/
+  , goneSyntax = /G/
+  , typeSyntax = /T=([\w|\/]+,?)/
+  , hostSyntax =  /H=(.+),?/
+  , flagSyntax = /\[(.*)\]$/;
 
 /**
  * Get flags from rule rules
@@ -109,11 +128,10 @@ module.exports = function(rules) {
 
 function _parse(rules) {
   return (rules || []).map(function(rule) {
-    var parts = rule.replace(/\s+|\t+/g, ' ').split(' ')
-      , flags = '', flagRegex = /\[(.*)\]$/;
+    var parts = rule.replace(/\s+|\t+/g, ' ').split(' '), flags = '';
 
-    if(flagRegex.test(rule)) {
-      flags = flagRegex.exec(rule)[1];
+    if(flagSyntax.test(rule)) {
+      flags = flagSyntax.exec(rule)[1];
     }
 
     // Check inverted urls
@@ -122,20 +140,23 @@ function _parse(rules) {
       parts[0] = parts[0].substr(1);
     }
 
-    /* jshint ignore:start */
+    var redirectValue = redirectSyntax.exec(flags)
+      , typeValue = typeSyntax.exec(flags)
+      , hostValue = hostSyntax.exec(flags);
 
+    /* jshint ignore:start */
     return {
-      regexp : typeof parts[2] !== 'undefined' && /NC/.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
+      regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
       replace : parts[1],
       inverted : inverted,
-      last : /L/.test(flags),
-      proxy : /P/.test(flags),
-      redirect : /R=?(\d+)?/.test(flags) ? (typeof /R=?(\d+)?/.exec(flags)[1] !== 'undefined' ? /R=?(\d+)?/.exec(flags)[1] : 301) : false,
-      forbidden : /F/.test(flags),
-      gone : /G/.test(flags),
-      type : /T=([\w|\/]+)/.test(flags) ? (typeof /T=([\w|\/]+)/.exec(flags)[1] !== 'undefined' ? /T=([\w|\/]+)/.exec(flags)[1] : 'text/plain') : false,
+      last : lastSyntax.test(flags),
+      proxy : proxySyntax.test(flags),
+      redirect : redirectValue ? (typeof redirectValue[1] !== 'undefined' ? redirectValue[1] : 301) : false,
+      forbidden : forbiddenSyntax.test(flags),
+      gone : goneSyntax.test(flags),
+      type : typeValue ? (typeof typeValue[1] !== 'undefined' ? typeValue[1] : 'text/plain') : false,
+      host : hostValue ? new RegExp(hostValue[1]) : false
     };
-
     /* jshint ignore:end */
   });
 }

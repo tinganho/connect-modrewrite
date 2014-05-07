@@ -322,4 +322,42 @@ describe('Connect-modrewrite', function() {
       httpReq.end.should.have.been.calledOnce;
     });
   });
+
+  describe('hostname', function() {
+    it('should use the current rule if the host match', function() {
+      var middleware = modRewrite(['/a /b [H=(.+)\\.webview\\..*]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'ios.webview.test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/b');
+    });
+
+    it('should not jump to the next rule if the host doesn\'t match', function() {
+      var middleware = modRewrite(['/a /b [H=(.+)\\.webview\\..*]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/a');
+    });
+  });
 });

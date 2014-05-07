@@ -20,7 +20,7 @@ var noCaseSyntax = /NC/
   , forbiddenSyntax = /F/
   , goneSyntax = /G/
   , typeSyntax = /T=([\w|\/]+,?)/
-  , hostSyntax =  /H=([\w|\d|\:|\.]),?/
+  , hostSyntax =  /H=([^,]+)/
   , flagSyntax = /\[(.*)\]$/
   , partsSyntax = /\s+|\t+/g
   , httpsSyntax = /^https/

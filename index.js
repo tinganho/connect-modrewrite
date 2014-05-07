@@ -116,7 +116,8 @@ var noCaseSyntax = /NC/
   , goneSyntax = /G/
   , typeSyntax = /T=([\w|\/]+,?)/
   , hostSyntax =  /H=(.+),?/
-  , flagSyntax = /\[(.*)\]$/;
+  , flagSyntax = /\[(.*)\]$/
+  , partsSyntax = /\s+|\t+/g;
 
 /**
  * Get flags from rule rules
@@ -128,7 +129,7 @@ var noCaseSyntax = /NC/
 
 function _parse(rules) {
   return (rules || []).map(function(rule) {
-    var parts = rule.replace(/\s+|\t+/g, ' ').split(' '), flags = '';
+    var parts = rule.replace(partsSyntax, ' ').split(' '), flags = '';
 
     if(flagSyntax.test(rule)) {
       flags = flagSyntax.exec(rule)[1];
@@ -140,11 +141,12 @@ function _parse(rules) {
       parts[0] = parts[0].substr(1);
     }
 
+
     var redirectValue = redirectSyntax.exec(flags)
       , typeValue = typeSyntax.exec(flags)
       , hostValue = hostSyntax.exec(flags);
 
-    /* jshint ignore:start */
+
     return {
       regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
       replace : parts[1],
@@ -157,7 +159,6 @@ function _parse(rules) {
       type : typeValue ? (typeof typeValue[1] !== 'undefined' ? typeValue[1] : 'text/plain') : false,
       host : hostValue ? new RegExp(hostValue[1]) : false
     };
-    /* jshint ignore:end */
   });
 }
 

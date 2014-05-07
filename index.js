@@ -9,7 +9,6 @@ var url = require('url')
   , httpsReq = require('https').request
   , defaultVia = '1.1 ' + require('os').hostname();
 
-
 /**
  * Syntaxes
  */

@@ -20,7 +20,7 @@ var noCaseSyntax = /NC/
   , forbiddenSyntax = /F/
   , goneSyntax = /G/
   , typeSyntax = /T=([\w|\/]+,?)/
-  , hostSyntax =  /H=(.+),?/
+  , hostSyntax =  /H=([\w|\d|\:|\.]),?/
   , flagSyntax = /\[(.*)\]$/
   , partsSyntax = /\s+|\t+/g
   , httpsSyntax = /^https/
@@ -39,14 +39,15 @@ module.exports = function(rules) {
       , callNext = true;
 
     rules.some(function(rule) {
-      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace)
-        , match = rule.regexp.test(req.url);
 
       if(rule.host) {
         if(!rule.host.test(req.headers.host)) {
           return false;
         }
       }
+
+      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace)
+        , match = rule.regexp.test(req.url);
 
       // If not match
       if(!match) {
@@ -132,6 +133,15 @@ module.exports = function(rules) {
 
 function _parse(rules) {
   return (rules || []).map(function(rule) {
+    // Reset all regular expression indexes
+    lastSyntax.lastIndex = 0;
+    proxySyntax.lastIndex = 0;
+    redirectSyntax.lastIndex = 0;
+    forbiddenSyntax.lastIndex = 0;
+    goneSyntax.lastIndex = 0;
+    typeSyntax.lastIndex = 0;
+    hostSyntax.lastIndex = 0;
+
     var parts = rule.replace(partsSyntax, ' ').split(' '), flags = '';
 
     if(flagSyntax.test(rule)) {

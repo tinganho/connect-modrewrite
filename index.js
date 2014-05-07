@@ -9,6 +9,24 @@ var url = require('url')
   , httpsReq = require('https').request
   , defaultVia = '1.1 ' + require('os').hostname();
 
+
+/**
+ * Syntaxes
+ */
+
+var noCaseSyntax = /NC/
+  , lastSyntax = /L/
+  , proxySyntax = /P/
+  , redirectSyntax = /R=?(\d+)?/
+  , forbiddenSyntax = /F/
+  , goneSyntax = /G/
+  , typeSyntax = /T=([\w|\/]+,?)/
+  , hostSyntax =  /H=(.+),?/
+  , flagSyntax = /\[(.*)\]$/
+  , partsSyntax = /\s+|\t+/g
+  , httpsSyntax = /^https/
+  , querySyntax = /\?.*/;
+
 /**
  * Export `API`
  */
@@ -93,8 +111,9 @@ module.exports = function(rules) {
     });
 
     // Add to query object
-    if(/\?.*/.test(req.url)) {
-      req.params = req.query = querystring.parse(/\?(.*)/.exec(req.url)[1]);
+    var queryValue = querySyntax.exec(req.url);
+    if(queryValue) {
+      req.params = req.query = querystring.parse(queryValue[1]);
     }
 
     if(callNext) {
@@ -103,21 +122,6 @@ module.exports = function(rules) {
 
   };
 };
-
-/**
- * Regular expression flags
- */
-
-var noCaseSyntax = /NC/
-  , lastSyntax = /L/
-  , proxySyntax = /P/
-  , redirectSyntax = /R=?(\d+)?/
-  , forbiddenSyntax = /F/
-  , goneSyntax = /G/
-  , typeSyntax = /T=([\w|\/]+,?)/
-  , hostSyntax =  /H=(.+),?/
-  , flagSyntax = /\[(.*)\]$/
-  , partsSyntax = /\s+|\t+/g;
 
 /**
  * Get flags from rule rules
@@ -141,11 +145,9 @@ function _parse(rules) {
       parts[0] = parts[0].substr(1);
     }
 
-
     var redirectValue = redirectSyntax.exec(flags)
       , typeValue = typeSyntax.exec(flags)
       , hostValue = hostSyntax.exec(flags);
-
 
     return {
       regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
@@ -173,7 +175,7 @@ function _parse(rules) {
 
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule)
-    , request = /^https/.test(rule.replace) ? httpsReq : httpReq;
+    , request = httpsSyntax.test(rule.replace) ? httpsReq : httpReq;
 
   var pipe = request(opts, function (res) {
     res.headers.via = opts.headers.via;

@@ -70,7 +70,7 @@ Gives a HTTP 410 gone response.
 ### Type \[T=*\] (replace * with mime-type)
 Sets content-type to the specified one.
 
-### Host [H], \[R=3**\] (replace * with a regular expression that match a hostname)
+### Host [H], \[H=*\] (replace * with a regular expression that match a hostname)
 Match on host.
 
 

@@ -24,7 +24,7 @@ var noCaseSyntax = /NC/
   , flagSyntax = /\[(.*)\]$/
   , partsSyntax = /\s+|\t+/g
   , httpsSyntax = /^https/
-  , querySyntax = /\?.*/;
+  , querySyntax = /\?(.*)/;
 
 /**
  * Export `API`

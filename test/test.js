@@ -24,7 +24,7 @@ chai.use(sinonChai);
 
 describe('Connect-modrewrite', function() {
   describe('non-match', function() {
-    it('should should leave the url unrewritten if there is no match', function() {
+    it('should leave the url unrewritten if there is no match', function() {
       var middleware = modRewrite(['/a /b [L]', '/a /c']);
       var req = {
         connection : { encrypted : false },
@@ -39,6 +39,24 @@ describe('Connect-modrewrite', function() {
       var next = function() {};
       middleware(req, res, next);
       expect(req.url).to.equal('/d');
+    });
+
+    it('should keep the query parameters', function() {
+
+      var middleware = modRewrite(['/a /b [L]', '/a /c']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/d?foo=bar&q'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.query).to.deep.equal({foo: 'bar', q: ''});
     });
   });
 

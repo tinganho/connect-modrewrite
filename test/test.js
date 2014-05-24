@@ -57,7 +57,7 @@ describe('Connect-modrewrite', function() {
       var next = function() {};
       middleware(req, res, next);
       expect(req.query).to.deep.equal({foo: 'bar', q: ''});
-    })
+    });
   });
 
   describe('last flag', function() {

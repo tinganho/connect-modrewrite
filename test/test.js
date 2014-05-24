@@ -24,7 +24,7 @@ chai.use(sinonChai);
 
 describe('Connect-modrewrite', function() {
   describe('non-match', function() {
-    it('should should leave the url unrewritten if there is no match', function() {
+    it('should leave the url unrewritten if there is no match', function() {
       var middleware = modRewrite(['/a /b [L]', '/a /c']);
       var req = {
         connection : { encrypted : false },

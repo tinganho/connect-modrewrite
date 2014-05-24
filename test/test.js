@@ -42,7 +42,6 @@ describe('Connect-modrewrite', function() {
     });
 
     it('should keep the query parameters', function() {
-
       var middleware = modRewrite(['/a /b [L]', '/a /c']);
       var req = {
         connection : { encrypted : false },

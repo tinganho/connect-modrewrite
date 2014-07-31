@@ -26,6 +26,9 @@
       "url": "https://github.com/tinganho/connect-modrewrite/blob/master/LICENSE-MIT"
     }
   ],
+  "dependencies": {
+    "qs": "^0.6.6"
+  },
   "devDependencies": {
     "grunt-contrib-jshint": "^0.8.0",
     "grunt": "~0.4.0",

@@ -4,7 +4,7 @@
  */
 
 var url = require('url')
-  , querystring = require('querystring')
+  , qs = require('qs')
   , httpReq = require('http').request
   , httpsReq = require('https').request
   , defaultVia = '1.1 ' + require('os').hostname();
@@ -113,7 +113,7 @@ module.exports = function(rules) {
     // Add to query object
     var queryValue = querySyntax.exec(req.url);
     if(queryValue) {
-      req.params = req.query = querystring.parse(queryValue[1]);
+      req.params = req.query = qs.parse(queryValue[1]);
     }
 
     if(callNext) {

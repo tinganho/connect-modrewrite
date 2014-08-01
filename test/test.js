@@ -42,6 +42,93 @@ describe('Connect-modrewrite', function() {
     });
   });
 
+  describe('matching urls', function() {
+    it('it should replace the entire url when doing a partial match', function() {
+      var middleware = modRewrite(['def-(123) /b-$1']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/abc-def-123-456'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/b-123');
+    });
+
+    it('it should match from the beginning when using ^', function() {
+      var middleware = modRewrite(['^/def-(123) /b-$1']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/def-123-xyz'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/b-123');
+    });
+
+    it('it should not match if using ^ and beginning doesnt match', function() {
+      var middleware = modRewrite(['^/def-(123) /b-$1']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a/def-123-xyz'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/a/def-123-xyz');
+    });
+
+    it('it should match from the end using $', function() {
+      var middleware = modRewrite(['/def-(123)$ /b-$1']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a/def-123'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/b-123');
+    });
+
+    it('it should not match if using $ and end doesnt match', function() {
+      var middleware = modRewrite(['/def-(123)$ /b-$1']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/a/def-123-xyz'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/a/def-123-xyz');
+    });
+  });
+
   describe('non-match', function() {
     it('should leave the url unrewritten if there is no match', function() {
       var middleware = modRewrite(['/a /b [L]', '/a /c']);

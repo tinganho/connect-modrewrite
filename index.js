@@ -159,7 +159,7 @@ function _parse(rules) {
       , hostValue = hostSyntax.exec(flags);
 
     return {
-      regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
+      regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp('.*'+parts[0]+'.*', 'i') : new RegExp('.*'+parts[0]+'.*'),
       replace : parts[1],
       inverted : inverted,
       last : lastSyntax.test(flags),

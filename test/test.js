@@ -23,6 +23,25 @@ chai.use(sinonChai);
 
 
 describe('Connect-modrewrite', function() {
+  describe('query params', function() {
+    it('should keep nested query parameters', function() {
+      var middleware = modRewrite(['/a /b [L]', '/a /c']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : '/d?foo[0]=bar&foo[1]=baz&q'
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.query).to.deep.equal({foo: ['bar','baz'], q: ''});
+    });
+  });
+
   describe('non-match', function() {
     it('should leave the url unrewritten if there is no match', function() {
       var middleware = modRewrite(['/a /b [L]', '/a /c']);

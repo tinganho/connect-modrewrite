@@ -37,8 +37,7 @@
     "sinon": "~1.8.2",
     "sinon-chai": "~2.5.0",
     "proxyquire": "~0.5.2",
-    "jshint-globals": "~0.1.0",
-    "express": "~3.16.7"
+    "jshint-globals": "~0.1.0"
   },
   "scripts": {
     "test": "./bin/test"

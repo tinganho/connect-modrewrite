@@ -19,8 +19,8 @@ var modRewrite = require('connect-modrewrite');
 An example configuration:
 
 ```javascript
-var app = connect() // express() for express server
-// app.configure(function() { for express server
+var app = connect() // express() for express 3.x  server
+// app.configure(function() { for express 3.x server
   .use(modRewrite([
     '^/test$ /index.html',
     '^/test/\\d*$ /index.html [L]',
@@ -28,7 +28,7 @@ var app = connect() // express() for express server
   ]))
   .use(connect.static(options.base))
   .listen(3000)
-// }) for express server
+// }) for express 3.x server
 ```
 
 # Configurations

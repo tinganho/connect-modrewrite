@@ -3,28 +3,28 @@
  * Module dependencies
  */
 
-var url = require('url')
-  , qs = require('qs')
-  , httpReq = require('http').request
-  , httpsReq = require('https').request
-  , defaultVia = '1.1 ' + require('os').hostname();
+var url = require('url');
+var qs = require('qs');
+var httpReq = require('http').request;
+var httpsReq = require('https').request;
+var defaultVia = '1.1 ' + require('os').hostname();
 
 /**
  * Syntaxes
  */
 
-var noCaseSyntax = /NC/
-  , lastSyntax = /L/
-  , proxySyntax = /P/
-  , redirectSyntax = /R=?(\d+)?/
-  , forbiddenSyntax = /F/
-  , goneSyntax = /G/
-  , typeSyntax = /T=([\w|\/]+,?)/
-  , hostSyntax =  /H=([^,]+)/
-  , flagSyntax = /\[(.*)\]$/
-  , partsSyntax = /\s+|\t+/g
-  , httpsSyntax = /^https/
-  , querySyntax = /\?(.*)/;
+var noCaseSyntax = /NC/;
+var lastSyntax = /L/;
+var proxySyntax = /P/;
+var redirectSyntax = /R=?(\d+)?/;
+var forbiddenSyntax = /F/;
+var goneSyntax = /G/;
+var typeSyntax = /T=([\w|\/]+,?)/;
+var hostSyntax =  /H=([^,]+)/;
+var flagSyntax = /\[(.*)\]$/;
+var partsSyntax = /\s+|\t+/g;
+var httpsSyntax = /^https/;
+var querySyntax = /\?(.*)/;
 
 /**
  * Export `API`
@@ -35,8 +35,8 @@ module.exports = function(rules) {
   rules = _parse(rules);
 
   return function(req, res, next) {
-    var protocol = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http'
-      , callNext = true;
+    var protocol = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    var callNext = true;
 
     rules.some(function(rule) {
 
@@ -47,7 +47,7 @@ module.exports = function(rules) {
       }
 
       var location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace)
-        , match = rule.regexp.test(req.url);
+      var match = rule.regexp.test(req.url);
 
       // If not match
       if(!match) {
@@ -154,9 +154,9 @@ function _parse(rules) {
       parts[0] = parts[0].substr(1);
     }
 
-    var redirectValue = redirectSyntax.exec(flags)
-      , typeValue = typeSyntax.exec(flags)
-      , hostValue = hostSyntax.exec(flags);
+    var redirectValue = redirectSyntax.exec(flags);
+    var typeValue = typeSyntax.exec(flags);
+    var hostValue = hostSyntax.exec(flags);
 
     return {
       regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
@@ -183,8 +183,8 @@ function _parse(rules) {
  */
 
 function _proxy(rule, metas) {
-  var opts = _getRequestOpts(metas.req, rule)
-    , request = httpsSyntax.test(rule.replace) ? httpsReq : httpReq;
+  var opts = _getRequestOpts(metas.req, rule);
+  var request = httpsSyntax.test(rule.replace) ? httpsReq : httpReq;
 
   var pipe = request(opts, function (res) {
     res.headers.via = opts.headers.via;
@@ -216,8 +216,8 @@ function _proxy(rule, metas) {
  */
 
 function _getRequestOpts(req, rule) {
-  var opts = url.parse(req.url.replace(rule.regexp, rule.replace), true)
-    , query = (opts.search != null) ? opts.search : '';
+  var opts = url.parse(req.url.replace(rule.regexp, rule.replace), true);
+  var query = (opts.search != null) ? opts.search : '';
 
   if(query) {
     opts.path = opts.pathname + query;

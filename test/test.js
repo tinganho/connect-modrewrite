@@ -291,6 +291,26 @@ describe('Connect-modrewrite', function() {
       res.end.should.have.been.calledAfter(res.writeHead);
     });
 
+    it('should be able to set a rewrite with hostname and protocol', function() {
+      var middleware = modRewrite(['/(.*) http://localhost/$1 [R]']);
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'localhost' },
+        url : '/a'
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      res.writeHead.should.have.been.calledWith(301, { Location : 'http://localhost/a'});
+      res.end.should.have.been.calledOnce;
+      res.end.should.have.been.calledAfter(res.writeHead);
+    });
+
     it('should set custom status code if rewrite custom flag is set', function() {
       var middleware = modRewrite(['/a /b [R=307]']);
       var req = {

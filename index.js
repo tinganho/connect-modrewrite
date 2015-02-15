@@ -46,7 +46,14 @@ module.exports = function(rules) {
         }
       }
 
-      var location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace)
+      var location;
+      if(/\:\/\//.test(rule.replace)) {
+        location = req.url.replace(rule.regexp, rule.replace);
+      }
+      else {
+        location = protocol + '://' + req.headers.host + req.url.replace(rule.regexp, rule.replace);
+      }
+
       var match = rule.regexp.test(req.url);
 
       // If not match
@@ -159,16 +166,16 @@ function _parse(rules) {
     var hostValue = hostSyntax.exec(flags);
 
     return {
-      regexp : typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
-      replace : parts[1],
-      inverted : inverted,
-      last : lastSyntax.test(flags),
-      proxy : proxySyntax.test(flags),
-      redirect : redirectValue ? (typeof redirectValue[1] !== 'undefined' ? redirectValue[1] : 301) : false,
-      forbidden : forbiddenSyntax.test(flags),
-      gone : goneSyntax.test(flags),
-      type : typeValue ? (typeof typeValue[1] !== 'undefined' ? typeValue[1] : 'text/plain') : false,
-      host : hostValue ? new RegExp(hostValue[1]) : false
+      regexp: typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
+      replace: parts[1],
+      inverted: inverted,
+      last: lastSyntax.test(flags),
+      proxy: proxySyntax.test(flags),
+      redirect: redirectValue ? (typeof redirectValue[1] !== 'undefined' ? redirectValue[1] : 301) : false,
+      forbidden: forbiddenSyntax.test(flags),
+      gone: goneSyntax.test(flags),
+      type: typeValue ? (typeof typeValue[1] !== 'undefined' ? typeValue[1] : 'text/plain') : false,
+      host: hostValue ? new RegExp(hostValue[1]) : false
     };
   });
 }

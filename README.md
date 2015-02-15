@@ -73,17 +73,18 @@ Sets content-type to the specified one.
 ### Host [H], \[H=*\] (replace * with a regular expression that match a hostname)
 Match on host.
 
-
 For more info about available flags, please go to the Apache page:
 http://httpd.apache.org/docs/current/rewrite/flags.html
 
 ## Authors
-Tingan Ho, tingan87[at]gmail.com
+Tingan Ho, [@tingan87][]
 
 ## License
-Copyright (c) 2012 Tingan Ho
 Licensed under the MIT license.
 
+## Other recommended projects
+### L10ns
+[L10ns][] is an internationalization workflow and formatting tool. It handles complex localization problems like pluralization, genus based formatting etc. It also provides a workflow similar to XGettext.
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/tinganho/connect-modrewrite/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
-
+[@tingan87]: https://twitter.com/tingan87
+[L10ns]: http://l10ns.org

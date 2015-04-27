@@ -41,9 +41,14 @@ Each rewrite rule is a string with the syntax:
 Begin with `!` for inverted URL matching.
 
 ## Use defined params
-Just wrap the defined param with `()` and access it with `$n`. This is defined in JS `.replace` in https://developer.mozilla.org/en/docs/JavaScript/Reference/Global_Objects/String/replace
+Just wrap the defined param with `()` and access it with `$n`. This is defined in JS `.replace` in https://developer.mozilla.org/en/docs/JavaScript/Reference/Global_Objects/String/replace.
 
 `^/blog/(.*) /$1`
+
+## Dash
+A dash indicates that no substitution should be performed.
+
+`^/blog/(.*) - [L]`
 
 ## Flags
 ### Last [L]

@@ -112,7 +112,9 @@ module.exports = function(rules) {
 
       // Rewrite
       if(!rule.inverted) {
-        req.url = req.url.replace(rule.regexp, rule.replace);
+        if (rule.replace !== '-') {
+          req.url = req.url.replace(rule.regexp, rule.replace);
+        }
         return rule.last;
       }
     });

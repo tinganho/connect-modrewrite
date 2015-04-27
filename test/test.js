@@ -434,4 +434,24 @@ describe('Connect-modrewrite', function() {
       expect(req.url).to.equal('/a');
     });
   });
+
+  describe('leave untouched', function() {
+    it('should use the current rule if the host match', function() {
+      var middleware = modRewrite(['^/a - [L]']);
+      var url = '/a/foo/bar/woot';
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : url
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal(url);
+    });
+  });
 });

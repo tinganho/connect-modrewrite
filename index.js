@@ -16,6 +16,7 @@ var defaultVia = '1.1 ' + require('os').hostname();
 var noCaseSyntax = /NC/;
 var lastSyntax = /L/;
 var proxySyntax = /P/;
+var queryStringSyntax = /QS/;
 var redirectSyntax = /R=?(\d+)?/;
 var forbiddenSyntax = /F/;
 var goneSyntax = /G/;
@@ -113,7 +114,11 @@ module.exports = function(rules) {
       // Rewrite
       if(!rule.inverted) {
         if (rule.replace !== '-') {
-          req.url = req.url.replace(rule.regexp, rule.replace);
+          if(rule.queryString) {
+            req.url = req.url.replace(/^\/[^?].*/, rule.replace);
+          } else {
+            req.url = req.url.replace(rule.regexp, rule.replace);  
+          }
         }
         return rule.last;
       }
@@ -175,6 +180,7 @@ function _parse(rules) {
       proxy: proxySyntax.test(flags),
       redirect: redirectValue ? (typeof redirectValue[1] !== 'undefined' ? redirectValue[1] : 301) : false,
       forbidden: forbiddenSyntax.test(flags),
+      queryString: queryStringSyntax.test(flags),
       gone: goneSyntax.test(flags),
       type: typeValue ? (typeof typeValue[1] !== 'undefined' ? typeValue[1] : 'text/plain') : false,
       host: hostValue ? new RegExp(hostValue[1]) : false

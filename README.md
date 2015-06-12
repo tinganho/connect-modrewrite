@@ -78,6 +78,13 @@ Sets content-type to the specified one.
 ### Host [H], \[H=*\] (replace * with a regular expression that match a hostname)
 Match on host.
 
+### Querystring [QS]
+A non-standard flag for allowing a query string rewrite condition
+```javasript
+'foo=bar /anotherfile.html [QS]'
+```
+This will rewrite the path with /anotherfile.html.
+
 For more info about available flags, please go to the Apache page:
 http://httpd.apache.org/docs/current/rewrite/flags.html
 

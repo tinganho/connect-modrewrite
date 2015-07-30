@@ -21,7 +21,7 @@ var forbiddenSyntax = /F/;
 var goneSyntax = /G/;
 var typeSyntax = /T=([\w|\/]+,?)/;
 var hostSyntax =  /H=([^,]+)/;
-var flagSyntax = /\[(.*)\]$/;
+var flagSyntax = /\[([^\]]+)]$/;
 var partsSyntax = /\s+|\t+/g;
 var httpsSyntax = /^https/;
 var querySyntax = /\?(.*)/;

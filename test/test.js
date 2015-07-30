@@ -454,4 +454,26 @@ describe('Connect-modrewrite', function() {
       expect(req.url).to.equal(url);
     });
   });
+
+  describe('only flags matched', function() {
+    it('should only match rules in the final square brackets', function() {
+      var middleware = modRewrite(['^/[a] /G [L]']);
+      var url = '/a';
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : url
+      };
+      var res = {
+        setHeader : function() {},
+        writeHead : sinon.spy(),
+        end : sinon.spy()
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/G');
+      res.writeHead.should.have.not.been.calledWith(410);
+    });
+  });
 });

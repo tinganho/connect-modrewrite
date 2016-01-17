@@ -35,7 +35,7 @@ module.exports = function(rules) {
   rules = _parse(rules);
 
   return function(req, res, next) {
-    var protocol = req.connection.encrypted || req.headers['x-forwarded-proto'] === 'https' ? 'https' : 'http';
+    var protocol = req.headers['x-forwarded-proto'] || req.connection.encrypted ? 'https' : 'http';
     var callNext = true;
 
     rules.some(function(rule) {
@@ -91,10 +91,10 @@ module.exports = function(rules) {
       // Proxy
       if(rule.proxy) {
         _proxy(rule, {
-          protocol : protocol,
-          req : req,
-          res : res,
-          next : next
+          protocol: protocol,
+          req: req,
+          res: res,
+          next: next
         });
         callNext = false;
         return true;
@@ -193,6 +193,8 @@ function _parse(rules) {
 
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule);
+  opts.protocol = metas.protocol + ':';
+  opts.slashes = true;
   var request = httpsSyntax.test(rule.replace) ? httpsReq : httpReq;
 
   var pipe = request(opts, function (res) {
@@ -226,7 +228,7 @@ function _proxy(rule, metas) {
 
 function _getRequestOpts(req, rule) {
   var opts = url.parse(req.url.replace(rule.regexp, rule.replace), true);
-  var query = (opts.search != null) ? opts.search : '';
+  var query = (opts.search !== null) ? opts.search : '';
 
   if(query) {
     opts.path = opts.pathname + query;

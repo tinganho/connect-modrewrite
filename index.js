@@ -233,6 +233,9 @@ function _getRequestOpts(req, rule) {
   }
   opts.method  = req.method;
   opts.headers = req.headers;
+  opts.agent = false;
+  opts.rejectUnauthorized = false;
+  opts.requestCert = false;
   var via = defaultVia;
   if(req.headers.via) {
     via = req.headers.via + ', ' + via;

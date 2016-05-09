@@ -476,4 +476,44 @@ describe('Connect-modrewrite', function() {
       res.writeHead.should.have.not.been.calledWith(410);
     });
   });
+
+  describe('next', function() {
+    it('should cause the ruleset to start over again from the top', function() {
+      var middleware = modRewrite(['^(.*)LI(.*) $1YUE$2 [N]']);
+      var url = '/LI/LI/LI/LI';
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : url
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/YUE/YUE/YUE/YUE');
+    });
+
+    it('should give up after 3 loops', function() {
+      var middleware = modRewrite(['^(.*?)LI(.*) $1YUE$2 [N=3]']);
+      var url = '/LI/LI/LI/LI';
+      var req = {
+        connection : { encrypted : false },
+        header : function() {},
+        headers : { host : 'test.com' },
+        url : url
+      };
+      var res = {
+        writeHead : function() {},
+        end : function() {}
+      };
+      var next = function() {};
+      middleware(req, res, next);
+      expect(req.url).to.equal('/YUE/YUE/YUE/LI');
+    });
+  });
+
+
 });

@@ -114,9 +114,13 @@ module.exports = function(rules) {
       // Rewrite
       if(!rule.inverted) {
         if (rule.replace !== '-') {
-          var loops = rule.next ? rule.next : 1;
+          var loops = rule.next || 1;
           for (var i = loops - 1; i >= 0; i--) {
+            var url = req.url
             req.url = req.url.replace(rule.regexp, rule.replace);
+            if (i > 0 && url === req.url) {
+              break;
+            }
           }
         }
         return rule.last;

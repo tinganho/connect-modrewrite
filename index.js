@@ -115,7 +115,7 @@ module.exports = function(rules) {
       if(!rule.inverted) {
         if (rule.replace !== '-') {
           var loops = rule.next || 1;
-          for (var i = loops - 1; i >= 0; i--) {
+          for (var i = 0; i < loops; i++) {
             var url = req.url;
             req.url = req.url.replace(rule.regexp, rule.replace);
             if (i > 0 && url === req.url) {

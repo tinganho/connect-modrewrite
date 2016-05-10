@@ -78,6 +78,9 @@ Sets content-type to the specified one.
 ### Host [H], \[H=*\] (replace * with a regular expression that match a hostname)
 Match on host.
 
+### Next [N], \[N=*\] (replace * with numbers)
+Rerun the rewrite rule repeatedly until the match fails.
+
 For more info about available flags, please go to the Apache page:
 http://httpd.apache.org/docs/current/rewrite/flags.html
 

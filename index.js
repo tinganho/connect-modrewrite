@@ -5,8 +5,7 @@
 
 var url = require('url');
 var qs = require('qs');
-var httpReq = require('http').request;
-var httpsReq = require('https').request;
+var request = require('request');
 var defaultVia = '1.1 ' + require('os').hostname();
 
 /**
@@ -193,26 +192,12 @@ function _parse(rules) {
 
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule);
-  var request = httpsSyntax.test(rule.replace) ? httpsReq : httpReq;
-
-  var pipe = request(opts, function (res) {
-    res.headers.via = opts.headers.via;
-    metas.res.writeHead(res.statusCode, res.headers);
-    res.on('error', function (err) {
-      metas.next(err);
-    });
-    res.pipe(metas.res);
-  });
-
-  pipe.on('error', function (err) {
-    metas.next(err);
-  });
-
-  if(!metas.req.readable) {
-    pipe.end();
-  } else {
-    metas.req.pipe(pipe);
-  }
+  request({ url: opts.href, method: opts.method || 'GET', jar: true })
+  .on('response', function(response) {
+    response.headers.via = opts.headers.via;
+  }).on('error', function(response) {
+    metas.next(response);
+  }).pipe(metas.res);
 }
 
 /**

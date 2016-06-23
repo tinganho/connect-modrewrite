@@ -22,7 +22,6 @@ var typeSyntax = /T=([\w|\/]+,?)/;
 var hostSyntax =  /H=([^,]+)/;
 var flagSyntax = /\[([^\]]+)]$/;
 var partsSyntax = /\s+|\t+/g;
-var httpsSyntax = /^https/;
 var querySyntax = /\?(.*)/;
 
 /**
@@ -192,9 +191,11 @@ function _parse(rules) {
 
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule);
-  request({ url: opts.href, method: opts.method || 'GET', jar: true })
-  .on('response', function(response) {
-    response.headers.via = opts.headers.via;
+  request({
+    url: opts.href,
+    method: opts.method || 'GET',
+    jar: true,
+    headers: opts.headers
   }).on('error', function(response) {
     metas.next(response);
   }).pipe(metas.res);

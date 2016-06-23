@@ -353,12 +353,11 @@ describe('Connect-modrewrite', function() {
 
   describe('proxy', function() {
     it('should proxy request whenever proxy flag is set', function() {
-      var onResponseStub = sinon.stub().returns({
+      var request = {
         on: sinon.stub().returns({
           pipe: sinon.stub()
         })
-      });
-      var request = { on: onResponseStub };
+      };
       var requestStub = sinon.stub().returns(request);
       var modRewrite = proxyquire('../', { request : requestStub });
 
@@ -366,18 +365,19 @@ describe('Connect-modrewrite', function() {
       var req = {
         connection : { encrypted : false },
         header : function() {},
-        headers : { host : 'test2.com' },
+        headers : { 'TEST_HEADER' : 'TEST_VALUE' },
         url : '/a',
         method: 'TEST_METHOD',
       };
       var next = function() {};
       middleware(req, {}, next);
-      requestStub.should.have.been.calledOnce;
-      expect(requestStub.args[0][0]).to.eql({ url: 'http://test1.com/', method: 'TEST_METHOD', jar: true });
 
-      var mockResponse = { headers: {} };
-      onResponseStub.args[0][1](mockResponse);
-      expect(mockResponse.headers.via).to.have.string('1.1');
+      requestStub.should.have.been.calledOnce;
+      expect(requestStub.args[0][0].url).to.eql('http://test1.com/');
+      expect(requestStub.args[0][0].method).to.eql('TEST_METHOD');
+      expect(requestStub.args[0][0].jar).to.be.true;
+      expect(requestStub.args[0][0].headers.TEST_HEADER).to.eql('TEST_VALUE');
+      expect(requestStub.args[0][0].headers.via).to.have.string('1.1');
     });
   });
 

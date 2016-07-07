@@ -8,7 +8,8 @@ var modRewrite = require('../')
   , chai = require('chai')
   , expect = require('chai').expect
   , proxyquire = require('proxyquire')
-  , sinonChai = require('sinon-chai');
+  , sinonChai = require('sinon-chai')
+  , stream = require('stream');
 
 /**
  * Plugins.
@@ -353,13 +354,15 @@ describe('Connect-modrewrite', function() {
 
   describe('proxy', function() {
     it('should proxy request whenever proxy flag is set', function() {
-      var request = {
+      var requestLibrary = {
         on: sinon.stub().returns({
           pipe: sinon.stub()
         })
       };
-      var requestStub = sinon.stub().returns(request);
+
+      var requestStub = sinon.stub().returns(requestLibrary);
       var modRewrite = proxyquire('../', { request : requestStub });
+      var requestStreamEndCallback = undefined;
 
       var middleware = modRewrite(['/a http://test1.com/ [P]']);
       var req = {
@@ -368,9 +371,20 @@ describe('Connect-modrewrite', function() {
         headers : { 'TEST_HEADER' : 'TEST_VALUE' },
         url : '/a',
         method: 'TEST_METHOD',
+        on : function(eventType, callback) {
+          "use strict";
+          if (eventType === 'data') {
+            callback('TEST_BODY');
+          } else if (eventType === 'end') {
+            requestStreamEndCallback = callback;
+          }
+        }
       };
       var next = function() {};
       middleware(req, {}, next);
+      if (requestStreamEndCallback) {
+        requestStreamEndCallback();
+      }
 
       requestStub.should.have.been.calledOnce;
       expect(requestStub.args[0][0].url).to.eql('http://test1.com/');
@@ -378,6 +392,7 @@ describe('Connect-modrewrite', function() {
       expect(requestStub.args[0][0].jar).to.be.true;
       expect(requestStub.args[0][0].headers.TEST_HEADER).to.eql('TEST_VALUE');
       expect(requestStub.args[0][0].headers.via).to.have.string('1.1');
+      expect(requestStub.args[0][0].body).to.have.string('TEST_BODY');
     });
   });
 

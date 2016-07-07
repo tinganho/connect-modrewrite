@@ -180,6 +180,18 @@ function _parse(rules) {
   });
 }
 
+function sendRequest(opts, requestBody, nextCallback, resPointer) {
+  request({
+    url: opts.href,
+    method: opts.method || 'GET',
+    jar: true,
+    headers: opts.headers,
+    body: requestBody
+  }).on('error', function(response) {
+    nextCallback(response);
+  }).pipe(resPointer);
+}
+
 /**
  * Proxy the request
  *
@@ -188,17 +200,17 @@ function _parse(rules) {
  * @return {void}
  * @api private
  */
-
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule);
-  request({
-    url: opts.href,
-    method: opts.method || 'GET',
-    jar: true,
-    headers: opts.headers
-  }).on('error', function(response) {
-    metas.next(response);
-  }).pipe(metas.res);
+  var requestBody = '';
+
+  metas.req.on('data', function(chunk) {
+    requestBody += chunk;
+  });
+
+  metas.req.on('end', function() {
+    sendRequest(opts, requestBody, metas.next, metas.res);
+  });
 }
 
 /**

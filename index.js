@@ -5,8 +5,7 @@
 
 var url = require('url');
 var qs = require('qs');
-var httpReq = require('http').request;
-var httpsReq = require('https').request;
+var request = require('request');
 var defaultVia = '1.1 ' + require('os').hostname();
 
 /**
@@ -23,7 +22,6 @@ var typeSyntax = /T=([\w|\/]+,?)/;
 var hostSyntax =  /H=([^,]+)/;
 var flagSyntax = /\[([^\]]+)]$/;
 var partsSyntax = /\s+|\t+/g;
-var httpsSyntax = /^https/;
 var querySyntax = /\?(.*)/;
 
 /**
@@ -182,6 +180,18 @@ function _parse(rules) {
   });
 }
 
+function sendRequest(opts, requestBody, nextCallback, resPointer) {
+  request({
+    url: opts.href,
+    method: opts.method || 'GET',
+    jar: true,
+    headers: opts.headers,
+    body: requestBody
+  }).on('error', function(response) {
+    nextCallback(response);
+  }).pipe(resPointer);
+}
+
 /**
  * Proxy the request
  *
@@ -190,29 +200,17 @@ function _parse(rules) {
  * @return {void}
  * @api private
  */
-
 function _proxy(rule, metas) {
   var opts = _getRequestOpts(metas.req, rule);
-  var request = httpsSyntax.test(rule.replace) ? httpsReq : httpReq;
+  var requestBody = '';
 
-  var pipe = request(opts, function (res) {
-    res.headers.via = opts.headers.via;
-    metas.res.writeHead(res.statusCode, res.headers);
-    res.on('error', function (err) {
-      metas.next(err);
-    });
-    res.pipe(metas.res);
+  metas.req.on('data', function(chunk) {
+    requestBody += chunk;
   });
 
-  pipe.on('error', function (err) {
-    metas.next(err);
+  metas.req.on('end', function() {
+    sendRequest(opts, requestBody, metas.next, metas.res);
   });
-
-  if(!metas.req.readable) {
-    pipe.end();
-  } else {
-    metas.req.pipe(pipe);
-  }
 }
 
 /**

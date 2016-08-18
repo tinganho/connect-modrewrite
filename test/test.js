@@ -353,29 +353,45 @@ describe('Connect-modrewrite', function() {
 
   describe('proxy', function() {
     it('should proxy request whenever proxy flag is set', function() {
-      var httpReq = { on : sinon.spy(), end : sinon.spy(), headers : {} };
-      var requestStub = sinon.stub().returns(httpReq);
-      var modRewrite = proxyquire('../', { http : { request : requestStub }});
+      var requestLibrary = {
+        on: sinon.stub().returns({
+          pipe: sinon.stub()
+        })
+      };
+
+      var requestStub = sinon.stub().returns(requestLibrary);
+      var modRewrite = proxyquire('../', { request : requestStub });
+      var requestStreamEndCallback;
+
       var middleware = modRewrite(['/a http://test1.com/ [P]']);
       var req = {
         connection : { encrypted : false },
         header : function() {},
-        headers : { host : 'test2.com' },
+        headers : { 'TEST_HEADER' : 'TEST_VALUE' },
         url : '/a',
-        pipe : function() {}
-      };
-      var res = {
-        setHeader : function() {},
-        writeHead : sinon.spy(),
-        end : sinon.spy()
+        method: 'TEST_METHOD',
+        on : function(eventType, callback) {
+          "use strict";
+          if (eventType === 'data') {
+            callback('TEST_BODY');
+          } else if (eventType === 'end') {
+            requestStreamEndCallback = callback;
+          }
+        }
       };
       var next = function() {};
-      middleware(req, res, next);
-      expect(requestStub.args[0][0].host).to.eql('test1.com');
-      expect(requestStub.args[0][0].hostname).to.eql('test1.com');
-      expect(requestStub.args[0][0].href).to.eql('http://test1.com/');
+      middleware(req, {}, next);
+      if (requestStreamEndCallback) {
+        requestStreamEndCallback();
+      }
+
+      requestStub.should.have.been.calledOnce;
+      expect(requestStub.args[0][0].url).to.eql('http://test1.com/');
+      expect(requestStub.args[0][0].method).to.eql('TEST_METHOD');
+      expect(requestStub.args[0][0].jar).to.be.true;
+      expect(requestStub.args[0][0].headers.TEST_HEADER).to.eql('TEST_VALUE');
       expect(requestStub.args[0][0].headers.via).to.have.string('1.1');
-      httpReq.end.should.have.been.calledOnce;
+      expect(requestStub.args[0][0].body).to.have.string('TEST_BODY');
     });
   });
 

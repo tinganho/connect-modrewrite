@@ -8,8 +8,7 @@ var modRewrite = require('../')
   , chai = require('chai')
   , expect = require('chai').expect
   , proxyquire = require('proxyquire')
-  , sinonChai = require('sinon-chai')
-  , stream = require('stream');
+  , sinonChai = require('sinon-chai');
 
 /**
  * Plugins.
@@ -362,7 +361,7 @@ describe('Connect-modrewrite', function() {
 
       var requestStub = sinon.stub().returns(requestLibrary);
       var modRewrite = proxyquire('../', { request : requestStub });
-      var requestStreamEndCallback = undefined;
+      var requestStreamEndCallback;
 
       var middleware = modRewrite(['/a http://test1.com/ [P]']);
       var req = {

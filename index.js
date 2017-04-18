@@ -25,6 +25,7 @@ var flagSyntax = /\[([^\]]+)]$/;
 var partsSyntax = /\s+|\t+/g;
 var httpsSyntax = /^https/;
 var querySyntax = /\?(.*)/;
+var nextSyntax = /N=?(\d+)?/;
 
 /**
  * Export `API`
@@ -113,10 +114,18 @@ module.exports = function(rules) {
       // Rewrite
       if(!rule.inverted) {
         if (rule.replace !== '-') {
-          req.url = req.url.replace(rule.regexp, rule.replace);
+          var loops = rule.next || 1;
+          for (var i = 0; i < loops; i++) {
+            var url = req.url;
+            req.url = req.url.replace(rule.regexp, rule.replace);
+            if (i > 0 && url === req.url) {
+              break;
+            }
+          }
         }
         return rule.last;
       }
+
     });
 
     // Add to query object
@@ -166,6 +175,7 @@ function _parse(rules) {
     var redirectValue = redirectSyntax.exec(flags);
     var typeValue = typeSyntax.exec(flags);
     var hostValue = hostSyntax.exec(flags);
+    var nextValue = nextSyntax.exec(flags);
 
     return {
       regexp: typeof parts[2] !== 'undefined' && noCaseSyntax.test(flags) ? new RegExp(parts[0], 'i') : new RegExp(parts[0]),
@@ -177,7 +187,8 @@ function _parse(rules) {
       forbidden: forbiddenSyntax.test(flags),
       gone: goneSyntax.test(flags),
       type: typeValue ? (typeof typeValue[1] !== 'undefined' ? typeValue[1] : 'text/plain') : false,
-      host: hostValue ? new RegExp(hostValue[1]) : false
+      host: hostValue ? new RegExp(hostValue[1]) : false,
+      next: nextValue ? (typeof nextValue[1] !== 'undefined' ? nextValue[1] : 32000) : false
     };
   });
 }

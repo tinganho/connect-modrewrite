@@ -197,6 +197,19 @@ function _proxy(rule, metas) {
 
   var pipe = request(opts, function (res) {
     res.headers.via = opts.headers.via;
+    
+    // rewrite cookie path settings
+    // set-cookie: JSESSIONID=25E9A4B85C0C9CA81C7DEC9B559CC8CB; Path=/YOUR-PATH/; HttpOnly
+    // will become:
+    // set-cookie: JSESSIONID=25E9A4B85C0C9CA81C7DEC9B559CC8CB; Path=/; HttpOnly
+    var cookie = res.headers['set-cookie'];
+    if(cookie) {
+      res.headers['set-cookie'] = cookie.map(function(item) {
+          // Replace paths in all cookies. The simple string/replace approach might be too naive in some cases, so check before you copy&paste before thinking
+          return item.replace(/(path=[^;]*)/gi, 'Path=/');
+      });
+    }
+    
     metas.res.writeHead(res.statusCode, res.headers);
     res.on('error', function (err) {
       metas.next(err);
